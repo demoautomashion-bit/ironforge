@@ -6,6 +6,12 @@ export const metadata: Metadata = {
   title: 'Iron District | Gym Management',
   description: 'A focused dashboard for managing gym members, dues, and payments.',
   generator: 'v0.app',
+  manifest: '/manifest.webmanifest',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: 'Iron District',
+  },
   icons: {
     icon: [
       {
@@ -40,7 +46,21 @@ export default function RootLayout({
       <body className="antialiased">
         {children}
         {process.env.NODE_ENV === 'production' && <Analytics />}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              if ('serviceWorker' in navigator) {
+                window.addEventListener('load', function() {
+                  navigator.serviceWorker.register('/sw.js').catch(function(err) {
+                    console.log('ServiceWorker registration failed: ', err);
+                  });
+                });
+              }
+            `,
+          }}
+        />
       </body>
     </html>
   )
 }
+
