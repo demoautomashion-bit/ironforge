@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { initialMembers } from '@/lib/mock-data'
 import { Member, ThemeColor } from '@/lib/types'
 import { Header } from '@/components/Header'
@@ -30,7 +30,54 @@ export default function Page() {
     setTimeout(() => setToastMessage(null), 3000)
   }
 
-  function handleMarkPaid(id: string) {
+  // Fetch roster from backend API
+  const fetchMembers = useCallback(async () => {
+    try {
+      const res = await fetch('/api/members')
+      if (res.ok) {
+        const json = await res.json()
+        if (json.success && Array.isArray(json.data)) {
+          setMembers(json.data)
+        }
+      }
+    } catch (e) {
+      console.warn('API fetch fallback to local state', e)
+    }
+  }, [])
+
+  useEffect(() => {
+    fetchMembers()
+  }, [fetchMembers])
+
+  // Execute ACID payment transaction via API
+  async function handleMarkPaid(id: string) {
+    const target = members.find((m) => m.id === id)
+    if (!target) return
+
+    try {
+      const res = await fetch('/api/payments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          memberId: id,
+          amountPKR: target.monthlyFee,
+          method: 'Cash',
+        }),
+      })
+
+      if (res.ok) {
+        const json = await res.json()
+        if (json.success) {
+          fetchMembers()
+          showToast(`Fee marked as paid for ${target.name}!`)
+          return
+        }
+      }
+    } catch (e) {
+      console.warn('Fallback local state payment update')
+    }
+
+    // Local fallback update
     setMembers((prev) =>
       prev.map((m) =>
         m.id === id
@@ -46,11 +93,30 @@ export default function Page() {
           : m
       )
     )
-    const target = members.find((m) => m.id === id)
-    showToast(`Fee marked as paid for ${target?.name || 'member'}!`)
+    showToast(`Fee marked as paid for ${target.name}!`)
   }
 
-  function handleAddMember(newMemberData: Omit<Member, 'id'>) {
+  // Register new member via API
+  async function handleAddMember(newMemberData: Omit<Member, 'id'>) {
+    try {
+      const res = await fetch('/api/members', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newMemberData),
+      })
+
+      if (res.ok) {
+        const json = await res.json()
+        if (json.success) {
+          fetchMembers()
+          showToast(`New member ${json.data.name} added successfully!`)
+          return
+        }
+      }
+    } catch (e) {
+      console.warn('Fallback local state member addition')
+    }
+
     const newMember: Member = {
       ...newMemberData,
       id: Date.now().toString(),
@@ -59,8 +125,20 @@ export default function Page() {
     showToast(`New member ${newMember.name} added successfully!`)
   }
 
-  function handleDeleteMember(id: string) {
+  // Soft-delete member via API
+  async function handleDeleteMember(id: string) {
     const target = members.find((m) => m.id === id)
+    try {
+      const res = await fetch(`/api/members/${id}`, { method: 'DELETE' })
+      if (res.ok) {
+        fetchMembers()
+        showToast(`Removed ${target?.name || 'member'} from roster.`)
+        return
+      }
+    } catch (e) {
+      console.warn('Fallback local state member deletion')
+    }
+
     setMembers((prev) => prev.filter((m) => m.id !== id))
     showToast(`Removed ${target?.name || 'member'} from roster.`)
   }
