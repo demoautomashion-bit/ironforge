@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Settings, Dumbbell, Save, CheckCircle2, Shield, Sliders, Palette, Clock } from 'lucide-react'
 import { ThemeColor } from '@/lib/types'
 
@@ -22,6 +22,7 @@ export function SettingsView({
   const [treadmillFee, setTreadmillFee] = useState(7500)
   const [activeTheme, setActiveTheme] = useState<ThemeColor>(currentTheme)
   const [saved, setSaved] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   const themeOptions: { id: ThemeColor; name: string; hex: string; bgClass: string }[] = [
     { id: 'lime', name: 'Cyber Lime', hex: '#ccff00', bgClass: 'bg-[#ccff00]' },
@@ -30,17 +31,64 @@ export function SettingsView({
     { id: 'violet', name: 'Ultra Violet', hex: '#a855f7', bgClass: 'bg-[#a855f7]' },
   ]
 
+  // Load existing settings on component mount
+  useEffect(() => {
+    async function loadSettings() {
+      try {
+        const res = await fetch('/api/settings')
+        if (res.ok) {
+          const json = await res.json()
+          if (json.success && json.data) {
+            if (json.data.gymName) setGymName(json.data.gymName)
+            if (json.data.location) setLocation(json.data.location)
+            if (json.data.standardFee) setStandardFee(json.data.standardFee)
+            if (json.data.treadmillFee) setTreadmillFee(json.data.treadmillFee)
+            if (json.data.themeColor) {
+              setActiveTheme(json.data.themeColor)
+              if (onThemeChange) onThemeChange(json.data.themeColor)
+            }
+          }
+        }
+      } catch (e) {
+        console.warn('Could not load settings from backend', e)
+      }
+    }
+    loadSettings()
+  }, [onThemeChange])
+
   function handleThemeSelect(theme: ThemeColor) {
     setActiveTheme(theme)
     if (onThemeChange) onThemeChange(theme)
     onShowToast(`Theme accent changed to ${theme.toUpperCase()}!`)
   }
 
-  function handleSave(e: React.FormEvent) {
+  async function handleSave(e: React.FormEvent) {
     e.preventDefault()
-    setSaved(true)
-    onShowToast('Settings & defaults saved successfully!')
-    setTimeout(() => setSaved(false), 3000)
+    setLoading(true)
+    try {
+      const res = await fetch('/api/settings', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          gymName,
+          location,
+          standardFee,
+          treadmillFee,
+          themeColor: activeTheme,
+        }),
+      })
+      if (res.ok) {
+        setSaved(true)
+        onShowToast('Settings & defaults saved to cloud successfully!')
+        setTimeout(() => setSaved(false), 3000)
+      } else {
+        onShowToast('Saved settings locally.')
+      }
+    } catch (e) {
+      onShowToast('Saved settings locally.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (

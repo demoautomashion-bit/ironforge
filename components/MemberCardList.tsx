@@ -1,6 +1,6 @@
 'use client'
 
-import { Check, Ellipsis, PhoneCall, Calendar } from 'lucide-react'
+import { Check, Ellipsis, PhoneCall, Calendar, Trash2 } from 'lucide-react'
 import { Member } from '@/lib/types'
 import { avatarColors, formatPKR } from '@/lib/mock-data'
 
@@ -8,9 +8,10 @@ interface MemberCardListProps {
   members: Member[]
   onMarkPaid: (id: string) => void
   onOpenActionSheet: (member: Member) => void
+  onOpenDeleteModal?: (member: Member) => void
 }
 
-export function MemberCardList({ members, onMarkPaid, onOpenActionSheet }: MemberCardListProps) {
+export function MemberCardList({ members, onMarkPaid, onOpenActionSheet, onOpenDeleteModal }: MemberCardListProps) {
   if (members.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-white/15 bg-white/[0.02] py-12 px-4 text-center">
@@ -84,6 +85,18 @@ export function MemberCardList({ members, onMarkPaid, onOpenActionSheet }: Membe
               <Check className="size-3.5" />
               <span>{member.status === 'Active' ? 'Fee Paid' : 'Mark Paid'}</span>
             </button>
+
+            {/* Direct Delete Icon Button */}
+            {onOpenDeleteModal && (
+              <button
+                aria-label={`Delete ${member.name}`}
+                onClick={() => onOpenDeleteModal(member)}
+                className="flex size-10 items-center justify-center rounded-xl border border-rose-500/30 bg-rose-500/10 text-rose-400 transition hover:bg-rose-500/20 active:scale-95"
+                title="Remove member from roster"
+              >
+                <Trash2 className="size-4" />
+              </button>
+            )}
 
             {/* Ellipsis Details Button */}
             <button

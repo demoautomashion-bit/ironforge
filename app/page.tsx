@@ -11,6 +11,7 @@ import { SettingsView } from '@/components/pages/SettingsView'
 import { AddMemberDrawer } from '@/components/AddMemberDrawer'
 import { AthleteProfileDrawer } from '@/components/AthleteProfileDrawer'
 import { PaymentReceiptModal } from '@/components/PaymentReceiptModal'
+import { DeleteConfirmModal } from '@/components/DeleteConfirmModal'
 import { CommandPalette } from '@/components/CommandPalette'
 import { NotificationDropdown } from '@/components/NotificationDropdown'
 
@@ -19,6 +20,7 @@ export default function Page() {
   const [addModalOpen, setAddModalOpen] = useState(false)
   const [selectedMember, setSelectedMember] = useState<Member | null>(null)
   const [receiptMember, setReceiptMember] = useState<Member | null>(null)
+  const [deleteModalMember, setDeleteModalMember] = useState<Member | null>(null)
   const [activeTab, setActiveTab] = useState('overview')
   const [toastMessage, setToastMessage] = useState<string | null>(null)
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false)
@@ -188,6 +190,7 @@ export default function Page() {
             onMarkPaid={handleMarkPaid}
             onOpenActionSheet={(member) => setSelectedMember(member)}
             onOpenAddMember={() => setAddModalOpen(true)}
+            onOpenDeleteModal={(member) => setDeleteModalMember(member)}
           />
         )}
 
@@ -222,6 +225,13 @@ export default function Page() {
         onMarkPaid={handleMarkPaid}
         onDeleteMember={handleDeleteMember}
         onOpenReceipt={(member) => setReceiptMember(member)}
+      />
+
+      {/* Delete Confirmation Modal */}
+      <DeleteConfirmModal
+        member={deleteModalMember}
+        onClose={() => setDeleteModalMember(null)}
+        onConfirmDelete={handleDeleteMember}
       />
 
       {/* Digital Receipt Modal */}

@@ -12,6 +12,7 @@ interface MembersViewProps {
   onMarkPaid: (id: string) => void
   onOpenActionSheet: (member: Member) => void
   onOpenAddMember: () => void
+  onOpenDeleteModal?: (member: Member) => void
 }
 
 export function MembersView({
@@ -19,6 +20,7 @@ export function MembersView({
   onMarkPaid,
   onOpenActionSheet,
   onOpenAddMember,
+  onOpenDeleteModal,
 }: MembersViewProps) {
   const [query, setQuery] = useState('')
   const [gender, setGender] = useState<'All' | Gender>('All')
@@ -78,6 +80,7 @@ export function MembersView({
         members={filteredMembers}
         onMarkPaid={onMarkPaid}
         onOpenActionSheet={onOpenActionSheet}
+        onOpenDeleteModal={onOpenDeleteModal}
       />
 
       {/* Desktop Table */}
@@ -85,6 +88,7 @@ export function MembersView({
         members={filteredMembers}
         onMarkPaid={onMarkPaid}
         onOpenActionSheet={onOpenActionSheet}
+        onOpenDeleteModal={onOpenDeleteModal}
       />
     </div>
   )

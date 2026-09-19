@@ -1,6 +1,6 @@
 'use client'
 
-import { Check, Ellipsis } from 'lucide-react'
+import { Check, Ellipsis, Trash2 } from 'lucide-react'
 import { Member } from '@/lib/types'
 import { avatarColors, formatPKR } from '@/lib/mock-data'
 
@@ -8,9 +8,10 @@ interface MemberTableProps {
   members: Member[]
   onMarkPaid: (id: string) => void
   onOpenActionSheet: (member: Member) => void
+  onOpenDeleteModal?: (member: Member) => void
 }
 
-export function MemberTable({ members, onMarkPaid, onOpenActionSheet }: MemberTableProps) {
+export function MemberTable({ members, onMarkPaid, onOpenActionSheet, onOpenDeleteModal }: MemberTableProps) {
   return (
     <div className="hidden overflow-hidden rounded-2xl border border-white/[0.09] bg-[#0d100f] shadow-2xl md:block transition-all">
       <div className="overflow-x-auto">
@@ -74,6 +75,18 @@ export function MemberTable({ members, onMarkPaid, onOpenActionSheet }: MemberTa
                       <Check className="size-3.5" />
                       <span>{member.status === 'Active' ? 'Paid' : 'Mark Paid'}</span>
                     </button>
+
+                    {/* Delete Icon Button */}
+                    {onOpenDeleteModal && (
+                      <button
+                        aria-label={`Delete ${member.name}`}
+                        onClick={() => onOpenDeleteModal(member)}
+                        className="flex size-8 items-center justify-center rounded-lg border border-rose-500/20 bg-rose-500/10 text-rose-400 transition hover:bg-rose-500/25 hover:text-rose-300 active:scale-95"
+                        title="Remove member from roster"
+                      >
+                        <Trash2 className="size-4" />
+                      </button>
+                    )}
 
                     {/* Options */}
                     <button
