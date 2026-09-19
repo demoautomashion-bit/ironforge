@@ -3,6 +3,7 @@
 import { X, Dumbbell, Calendar, Phone, Check, ShieldAlert, Trash2, Award, Clock } from 'lucide-react'
 import { Member } from '@/lib/types'
 import { avatarColors, formatPKR } from '@/lib/mock-data'
+import { calculatePaymentStatus } from '@/lib/date-utils'
 
 interface AthleteProfileDrawerProps {
   member: Member | null
@@ -20,6 +21,9 @@ export function AthleteProfileDrawer({
   onOpenReceipt,
 }: AthleteProfileDrawerProps) {
   if (!member) return null
+
+  const { status, daysRemaining, nextDueDate } = calculatePaymentStatus(member.paymentDate)
+  const progressPercent = Math.min(100, Math.max(5, Math.round((daysRemaining / 30) * 100)))
 
   const planPerks =
     member.plan === 'Treadmill Pro'
@@ -48,14 +52,14 @@ export function AthleteProfileDrawer({
                 <h2 className="text-xl font-black text-white">{member.name}</h2>
                 <span
                   className={`rounded-full px-2.5 py-0.5 text-[10px] font-extrabold uppercase ${
-                    member.status === 'Active'
+                    status === 'Active'
                       ? 'bg-[#ccff00]/15 text-[#ccff00] border border-[#ccff00]/30'
-                      : member.status === 'Due Soon'
+                      : status === 'Due Soon'
                       ? 'bg-amber-400/15 text-amber-300 border border-amber-400/30'
                       : 'bg-rose-400/15 text-rose-400 border border-rose-400/30'
                   }`}
                 >
-                  {member.status}
+                  {status}
                 </span>
               </div>
               <p className="text-xs text-white/50">{member.gender} Athlete • Member ID #{member.id}</p>
@@ -71,26 +75,32 @@ export function AthleteProfileDrawer({
         </div>
 
         {/* Expiry Progress Bar Widget */}
-        <div className="mb-5 rounded-2xl border border-white/[0.08] bg-white/[0.025] p-4">
-          <div className="flex items-center justify-between text-xs font-bold text-white mb-2">
+        <div className="mb-5 rounded-2xl border border-white/[0.08] bg-white/[0.025] p-4 space-y-2">
+          <div className="flex items-center justify-between text-xs font-bold text-white">
             <span className="flex items-center gap-1.5 text-white/70">
-              <Clock className="size-3.5 text-[#ccff00]" /> Membership Expiry Cycle
+              <Clock className="size-3.5 text-[#ccff00]" /> 30-Day Billing Cycle
             </span>
-            <span className={member.status === 'Active' ? 'text-[#ccff00]' : member.status === 'Due Soon' ? 'text-amber-300' : 'text-rose-400'}>
-              {member.status === 'Active' ? 'Active Membership' : member.status === 'Due Soon' ? 'Expires in 4 days' : 'Overdue Dues'}
+            <span className={status === 'Active' ? 'text-[#ccff00]' : status === 'Due Soon' ? 'text-amber-300' : 'text-rose-400'}>
+              {status === 'Active' ? `${daysRemaining} Days Left` : status === 'Due Soon' ? `Expires in ${daysRemaining} days` : 'Payment Overdue'}
             </span>
           </div>
+
           <div className="h-2.5 w-full rounded-full bg-white/10 overflow-hidden">
             <div
               className={`h-full rounded-full transition-all duration-500 ${
-                member.status === 'Active'
+                status === 'Active'
                   ? 'bg-gradient-to-r from-[#ccff00] to-emerald-400 shadow-[0_0_8px_#ccff00]'
-                  : member.status === 'Due Soon'
+                  : status === 'Due Soon'
                   ? 'bg-amber-400'
                   : 'bg-rose-500'
               }`}
-              style={{ width: member.status === 'Active' ? '85%' : member.status === 'Due Soon' ? '25%' : '5%' }}
+              style={{ width: `${progressPercent}%` }}
             />
+          </div>
+
+          <div className="flex justify-between text-[10px] text-white/40 pt-1">
+            <span>Paid: {member.paymentDate}</span>
+            <span className="font-bold text-white/70">Next Due: {nextDueDate}</span>
           </div>
         </div>
 

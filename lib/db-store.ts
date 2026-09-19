@@ -4,6 +4,7 @@
 import { prisma } from './db'
 import { Member, Status, PlanTier, ThemeColor } from './types'
 import { initialMembers } from './mock-data'
+import { calculatePaymentStatus } from './date-utils'
 
 export interface DBPaymentRecord {
   id: string
@@ -74,19 +75,22 @@ class NeonGymDatabase {
       orderBy: { createdAt: 'desc' },
     })
 
-    return records.map((m) => ({
-      id: m.id,
-      name: m.name,
-      initials: m.initials,
-      phone: m.phone || undefined,
-      gender: m.gender as any,
-      plan: m.plan as any,
-      monthlyFee: m.monthlyFee,
-      joinDate: m.joinDate,
-      paymentDate: m.paymentDate,
-      status: m.status as any,
-      color: m.color as any,
-    }))
+    return records.map((m) => {
+      const computedStatus = calculatePaymentStatus(m.paymentDate).status
+      return {
+        id: m.id,
+        name: m.name,
+        initials: m.initials,
+        phone: m.phone || undefined,
+        gender: m.gender as any,
+        plan: m.plan as any,
+        monthlyFee: m.monthlyFee,
+        joinDate: m.joinDate,
+        paymentDate: m.paymentDate,
+        status: computedStatus,
+        color: m.color as any,
+      }
+    })
   }
 
   public async getMemberById(id: string): Promise<Member | undefined> {
@@ -95,6 +99,7 @@ class NeonGymDatabase {
       where: { id, deletedAt: null },
     })
     if (!m) return undefined
+    const computedStatus = calculatePaymentStatus(m.paymentDate).status
     return {
       id: m.id,
       name: m.name,
@@ -105,7 +110,7 @@ class NeonGymDatabase {
       monthlyFee: m.monthlyFee,
       joinDate: m.joinDate,
       paymentDate: m.paymentDate,
-      status: m.status as any,
+      status: computedStatus,
       color: m.color as any,
     }
   }
