@@ -1,6 +1,7 @@
 export type Gender = 'Male' | 'Female'
 export type Status = 'Active' | 'Due Soon' | 'Overdue'
 export type PlanTier = 'Standard Gym' | 'Treadmill Pro'
+export type ThemeColor = 'lime' | 'cyan' | 'orange' | 'violet'
 
 export interface Member {
   id: string
@@ -24,4 +25,23 @@ export interface MetricData {
   positive?: boolean
   color: 'lime' | 'yellow' | 'red' | 'sky'
 }
+
+export interface ActivityItem {
+  id: string
+  title: string
+  subtitle: string
+  timestamp: string
+  type: 'payment' | 'join' | 'warning' | 'plan'
+}
+
+export interface Receipt {
+  receiptId: string
+  memberName: string
+  plan: PlanTier
+  monthlyFee: number
+  paymentDate: string
+  status: Status
+  paymentMethod: string
+}
+
 

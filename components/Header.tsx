@@ -1,15 +1,25 @@
 'use client'
 
 import { useState } from 'react'
-import { Activity, Dumbbell, Menu, Plus, X, Users, CreditCard, LayoutDashboard, Settings } from 'lucide-react'
+import { Activity, Dumbbell, Menu, Plus, X, Users, CreditCard, LayoutDashboard, Settings, Search, Bell } from 'lucide-react'
 
 interface HeaderProps {
   onOpenAddMember: () => void
   activeTab: string
   setActiveTab: (tab: string) => void
+  onOpenCommandPalette: () => void
+  onToggleNotifications: () => void
+  unreadCount?: number
 }
 
-export function Header({ onOpenAddMember, activeTab, setActiveTab }: HeaderProps) {
+export function Header({
+  onOpenAddMember,
+  activeTab,
+  setActiveTab,
+  onOpenCommandPalette,
+  onToggleNotifications,
+  unreadCount = 2,
+}: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   const navItems = [
@@ -62,10 +72,38 @@ export function Header({ onOpenAddMember, activeTab, setActiveTab }: HeaderProps
           </nav>
 
           {/* Actions */}
-          <div className="flex items-center gap-2.5">
+          <div className="relative flex items-center gap-2 sm:gap-2.5">
+            {/* Quick Search Shortcut */}
+            <button
+              onClick={onOpenCommandPalette}
+              title="Search athletes or navigate (Ctrl + K)"
+              className="flex h-10 items-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-3 text-xs font-semibold text-white/70 transition hover:bg-white/10 hover:text-white"
+            >
+              <Search className="size-4 text-[#ccff00]" />
+              <span className="hidden lg:inline">Search...</span>
+              <kbd className="hidden rounded bg-white/10 px-1.5 py-0.5 text-[10px] font-mono text-white/50 lg:inline">
+                Ctrl K
+              </kbd>
+            </button>
+
+            {/* Notification Bell */}
+            <button
+              onClick={onToggleNotifications}
+              title="Notifications & Dues Warnings"
+              className="relative flex size-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-white/70 transition hover:bg-white/10 hover:text-white"
+            >
+              <Bell className="size-4" />
+              {unreadCount > 0 && (
+                <span className="absolute -right-1 -top-1 flex size-4 items-center justify-center rounded-full bg-[#ccff00] text-[9px] font-black text-black shadow-[0_0_8px_#ccff00]">
+                  {unreadCount}
+                </span>
+              )}
+            </button>
+
+            {/* Add Member Button */}
             <button
               onClick={onOpenAddMember}
-              className="flex h-10 items-center gap-2 rounded-xl bg-[#ccff00] px-3.5 text-xs font-bold text-black shadow-[0_0_20px_rgba(204,255,0,0.18)] transition-all hover:bg-[#dcff63] hover:shadow-[0_0_25px_rgba(204,255,0,0.3)] active:scale-95 sm:px-4"
+              className="flex h-10 items-center gap-2 rounded-xl bg-[#ccff00] px-3 text-xs font-bold text-black shadow-[0_0_20px_rgba(204,255,0,0.18)] transition-all hover:bg-[#dcff63] hover:shadow-[0_0_25px_rgba(204,255,0,0.3)] active:scale-95 sm:px-4"
             >
               <Plus className="size-4 stroke-[3]" />
               <span className="hidden sm:inline">Add Member</span>
@@ -80,11 +118,6 @@ export function Header({ onOpenAddMember, activeTab, setActiveTab }: HeaderProps
             >
               {mobileMenuOpen ? <X className="size-5" /> : <Menu className="size-5" />}
             </button>
-
-            {/* Admin Avatar */}
-            <div className="hidden size-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.06] text-xs font-bold text-white shadow-inner sm:flex">
-              JD
-            </div>
           </div>
         </div>
 

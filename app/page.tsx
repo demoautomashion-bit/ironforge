@@ -2,21 +2,28 @@
 
 import { useState } from 'react'
 import { initialMembers } from '@/lib/mock-data'
-import { Member } from '@/lib/types'
+import { Member, ThemeColor } from '@/lib/types'
 import { Header } from '@/components/Header'
 import { OverviewView } from '@/components/pages/OverviewView'
 import { MembersView } from '@/components/pages/MembersView'
 import { PaymentsView } from '@/components/pages/PaymentsView'
 import { SettingsView } from '@/components/pages/SettingsView'
 import { AddMemberDrawer } from '@/components/AddMemberDrawer'
-import { MemberActionSheet } from '@/components/MemberActionSheet'
+import { AthleteProfileDrawer } from '@/components/AthleteProfileDrawer'
+import { PaymentReceiptModal } from '@/components/PaymentReceiptModal'
+import { CommandPalette } from '@/components/CommandPalette'
+import { NotificationDropdown } from '@/components/NotificationDropdown'
 
 export default function Page() {
   const [members, setMembers] = useState<Member[]>(initialMembers)
   const [addModalOpen, setAddModalOpen] = useState(false)
   const [selectedMember, setSelectedMember] = useState<Member | null>(null)
+  const [receiptMember, setReceiptMember] = useState<Member | null>(null)
   const [activeTab, setActiveTab] = useState('overview')
   const [toastMessage, setToastMessage] = useState<string | null>(null)
+  const [commandPaletteOpen, setCommandPaletteOpen] = useState(false)
+  const [notificationsOpen, setNotificationsOpen] = useState(false)
+  const [themeColor, setThemeColor] = useState<ThemeColor>('lime')
 
   function showToast(msg: string) {
     setToastMessage(msg)
@@ -68,11 +75,24 @@ export default function Page() {
       )}
 
       {/* Navigation Header */}
-      <Header
-        onOpenAddMember={() => setAddModalOpen(true)}
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-      />
+      <div className="relative">
+        <Header
+          onOpenAddMember={() => setAddModalOpen(true)}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          onOpenCommandPalette={() => setCommandPaletteOpen(true)}
+          onToggleNotifications={() => setNotificationsOpen(!notificationsOpen)}
+          unreadCount={members.filter((m) => m.status === 'Overdue').length}
+        />
+
+        {/* Notification Dropdown Popover */}
+        <NotificationDropdown
+          open={notificationsOpen}
+          onClose={() => setNotificationsOpen(false)}
+          members={members}
+          onNavigateToPayments={() => setActiveTab('payments')}
+        />
+      </div>
 
       {/* Main View Container */}
       <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
@@ -102,7 +122,11 @@ export default function Page() {
         )}
 
         {activeTab === 'settings' && (
-          <SettingsView onShowToast={showToast} />
+          <SettingsView
+            onShowToast={showToast}
+            currentTheme={themeColor}
+            onThemeChange={(t) => setThemeColor(t)}
+          />
         )}
       </div>
 
@@ -113,13 +137,30 @@ export default function Page() {
         onAddMember={handleAddMember}
       />
 
-      {/* Member Action Details Sheet */}
-      <MemberActionSheet
+      {/* Athlete Profile & Action Drawer */}
+      <AthleteProfileDrawer
         member={selectedMember}
         onClose={() => setSelectedMember(null)}
         onMarkPaid={handleMarkPaid}
         onDeleteMember={handleDeleteMember}
+        onOpenReceipt={(member) => setReceiptMember(member)}
+      />
+
+      {/* Digital Receipt Modal */}
+      <PaymentReceiptModal
+        member={receiptMember}
+        onClose={() => setReceiptMember(null)}
+      />
+
+      {/* Global Command Palette (Ctrl + K) */}
+      <CommandPalette
+        open={commandPaletteOpen}
+        onClose={() => setCommandPaletteOpen(false)}
+        members={members}
+        onSelectMember={(m) => setSelectedMember(m)}
+        onNavigate={(tab) => setActiveTab(tab)}
       />
     </main>
   )
 }
+

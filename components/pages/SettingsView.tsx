@@ -1,24 +1,45 @@
 'use client'
 
 import { useState } from 'react'
-import { Settings, Dumbbell, Save, CheckCircle2, Shield, Sliders } from 'lucide-react'
+import { Settings, Dumbbell, Save, CheckCircle2, Shield, Sliders, Palette, Clock } from 'lucide-react'
+import { ThemeColor } from '@/lib/types'
 
 interface SettingsViewProps {
   onShowToast: (msg: string) => void
+  currentTheme?: ThemeColor
+  onThemeChange?: (theme: ThemeColor) => void
 }
 
-export function SettingsView({ onShowToast }: SettingsViewProps) {
+export function SettingsView({
+  onShowToast,
+  currentTheme = 'lime',
+  onThemeChange,
+}: SettingsViewProps) {
   const [gymName, setGymName] = useState('Iron District PK')
   const [location, setLocation] = useState('Karachi, Pakistan')
-  const [currency, setCurrency] = useState('PKR (Rs.)')
+  const [currency] = useState('PKR (Rs.)')
   const [standardFee, setStandardFee] = useState(5000)
   const [treadmillFee, setTreadmillFee] = useState(7500)
+  const [activeTheme, setActiveTheme] = useState<ThemeColor>(currentTheme)
   const [saved, setSaved] = useState(false)
+
+  const themeOptions: { id: ThemeColor; name: string; hex: string; bgClass: string }[] = [
+    { id: 'lime', name: 'Cyber Lime', hex: '#ccff00', bgClass: 'bg-[#ccff00]' },
+    { id: 'cyan', name: 'Electric Cyan', hex: '#00f3ff', bgClass: 'bg-[#00f3ff]' },
+    { id: 'orange', name: 'Neon Orange', hex: '#ff6b00', bgClass: 'bg-[#ff6b00]' },
+    { id: 'violet', name: 'Ultra Violet', hex: '#a855f7', bgClass: 'bg-[#a855f7]' },
+  ]
+
+  function handleThemeSelect(theme: ThemeColor) {
+    setActiveTheme(theme)
+    if (onThemeChange) onThemeChange(theme)
+    onShowToast(`Theme accent changed to ${theme.toUpperCase()}!`)
+  }
 
   function handleSave(e: React.FormEvent) {
     e.preventDefault()
     setSaved(true)
-    onShowToast('Settings saved successfully!')
+    onShowToast('Settings & defaults saved successfully!')
     setTimeout(() => setSaved(false), 3000)
   }
 
@@ -34,16 +55,50 @@ export function SettingsView({ onShowToast }: SettingsViewProps) {
             </h1>
           </div>
           <p className="mt-1 text-xs text-white/50 sm:text-sm">
-            Manage gym identity, PKR currency defaults, membership plan rates, and admin profile.
+            Manage gym identity, theme accents, PKR currency defaults, and operating shift hours.
           </p>
         </div>
       </div>
 
       <form onSubmit={handleSave} className="space-y-6">
-        {/* Gym Identity Settings */}
+        {/* Live Theme Accent Customizer */}
         <div className="rounded-2xl border border-white/[0.08] bg-[#0d100f] p-6 space-y-4">
           <div className="flex items-center gap-3 pb-3 border-b border-white/[0.06]">
             <div className="flex size-9 items-center justify-center rounded-xl bg-[#ccff00]/10 text-[#ccff00] border border-[#ccff00]/20">
+              <Palette className="size-4" />
+            </div>
+            <div>
+              <h2 className="text-base font-extrabold text-white">Live Theme Accent Customizer</h2>
+              <p className="text-xs text-white/40">Select your preferred portal accent color theme</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            {themeOptions.map((t) => (
+              <button
+                key={t.id}
+                type="button"
+                onClick={() => handleThemeSelect(t.id)}
+                className={`flex items-center gap-3 rounded-xl border p-3 text-left transition ${
+                  activeTheme === t.id
+                    ? 'border-[#ccff00] bg-white/[0.06] shadow-[0_0_15px_rgba(204,255,0,0.15)]'
+                    : 'border-white/10 bg-white/[0.02] hover:bg-white/[0.05]'
+                }`}
+              >
+                <span className={`size-5 rounded-full ${t.bgClass} shadow-md`} />
+                <div>
+                  <p className="text-xs font-bold text-white">{t.name}</p>
+                  <p className="text-[10px] text-white/40">{t.hex}</p>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Gym Identity Settings */}
+        <div className="rounded-2xl border border-white/[0.08] bg-[#0d100f] p-6 space-y-4">
+          <div className="flex items-center gap-3 pb-3 border-b border-white/[0.06]">
+            <div className="flex size-9 items-center justify-center rounded-xl bg-sky-400/10 text-sky-400 border border-sky-400/20">
               <Dumbbell className="size-4" />
             </div>
             <div>
@@ -78,7 +133,7 @@ export function SettingsView({ onShowToast }: SettingsViewProps) {
         {/* Plan Pricing Configuration */}
         <div className="rounded-2xl border border-white/[0.08] bg-[#0d100f] p-6 space-y-4">
           <div className="flex items-center gap-3 pb-3 border-b border-white/[0.06]">
-            <div className="flex size-9 items-center justify-center rounded-xl bg-sky-400/10 text-sky-400 border border-sky-400/20">
+            <div className="flex size-9 items-center justify-center rounded-xl bg-[#ccff00]/10 text-[#ccff00] border border-[#ccff00]/20">
               <Sliders className="size-4" />
             </div>
             <div>
@@ -117,6 +172,37 @@ export function SettingsView({ onShowToast }: SettingsViewProps) {
                 />
               </div>
             </label>
+          </div>
+        </div>
+
+        {/* Shift Operational Hours Manager */}
+        <div className="rounded-2xl border border-white/[0.08] bg-[#0d100f] p-6 space-y-4">
+          <div className="flex items-center gap-3 pb-3 border-b border-white/[0.06]">
+            <div className="flex size-9 items-center justify-center rounded-xl bg-amber-400/10 text-amber-400 border border-amber-400/20">
+              <Clock className="size-4" />
+            </div>
+            <div>
+              <h2 className="text-base font-extrabold text-white">Operational Shift Schedule</h2>
+              <p className="text-xs text-white/40">Iron District PK daily operating hours</p>
+            </div>
+          </div>
+
+          <div className="grid gap-3 sm:grid-cols-3 text-xs">
+            <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3.5">
+              <p className="font-bold text-[#ccff00]">Morning Shift</p>
+              <p className="mt-1 font-semibold text-white">06:00 AM – 11:30 AM</p>
+              <p className="text-[10px] text-white/40">Open for all athletes</p>
+            </div>
+            <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3.5">
+              <p className="font-bold text-pink-400">Ladies Exclusive Shift</p>
+              <p className="mt-1 font-semibold text-white">12:00 PM – 04:00 PM</p>
+              <p className="text-[10px] text-white/40">Female trainers & athletes only</p>
+            </div>
+            <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3.5">
+              <p className="font-bold text-sky-400">Evening Peak Shift</p>
+              <p className="mt-1 font-semibold text-white">04:30 PM – 11:00 PM</p>
+              <p className="text-[10px] text-white/40">Open for all athletes</p>
+            </div>
           </div>
         </div>
 
@@ -169,3 +255,4 @@ export function SettingsView({ onShowToast }: SettingsViewProps) {
     </div>
   )
 }
+
