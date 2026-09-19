@@ -10,7 +10,7 @@ export async function GET(request: Request) {
     const gender = searchParams.get('gender') || undefined
     const status = searchParams.get('status') || undefined
 
-    const members = gymDB.getMembers(query, gender, status)
+    const members = await gymDB.getMembers(query, gender, status)
     return NextResponse.json({ success: true, count: members.length, data: members })
   } catch (error) {
     return NextResponse.json({ success: false, message: 'Failed to fetch members' }, { status: 500 })
@@ -46,7 +46,7 @@ export async function POST(request: Request) {
     const colors = ['lime', 'blue', 'violet', 'orange', 'pink', 'cyan'] as const
     const randomColor = colors[Math.floor(Math.random() * colors.length)]
 
-    const newMember = gymDB.createMember({
+    const newMember = await gymDB.createMember({
       name,
       initials,
       phone,

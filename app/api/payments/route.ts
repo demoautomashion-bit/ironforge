@@ -4,7 +4,7 @@ import { validatePayment } from '@/lib/validations'
 
 // GET /api/payments
 export async function GET() {
-  const payments = gymDB.getPayments()
+  const payments = await gymDB.getPayments()
   return NextResponse.json({ success: true, count: payments.length, data: payments })
 }
 
@@ -20,7 +20,7 @@ export async function POST(request: Request) {
 
     const { memberId, amountPKR, method } = validation.data
 
-    const result = gymDB.recordPayment(memberId, amountPKR, method)
+    const result = await gymDB.recordPayment(memberId, amountPKR, method)
 
     if (!result.success || !result.payment) {
       return NextResponse.json(
@@ -42,3 +42,4 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 })
   }
 }
+

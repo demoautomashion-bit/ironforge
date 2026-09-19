@@ -8,7 +8,7 @@ interface RouteParams {
 // GET /api/members/[id]
 export async function GET(request: Request, { params }: RouteParams) {
   const { id } = await params
-  const member = gymDB.getMemberById(id)
+  const member = await gymDB.getMemberById(id)
   if (!member) {
     return NextResponse.json({ success: false, message: 'Member not found' }, { status: 404 })
   }
@@ -20,7 +20,7 @@ export async function PUT(request: Request, { params }: RouteParams) {
   const { id } = await params
   try {
     const body = await request.json()
-    const updated = gymDB.updateMember(id, body)
+    const updated = await gymDB.updateMember(id, body)
     if (!updated) {
       return NextResponse.json({ success: false, message: 'Member not found' }, { status: 404 })
     }
@@ -33,9 +33,10 @@ export async function PUT(request: Request, { params }: RouteParams) {
 // DELETE /api/members/[id] (Soft Delete Safeguard)
 export async function DELETE(request: Request, { params }: RouteParams) {
   const { id } = await params
-  const deleted = gymDB.softDeleteMember(id)
+  const deleted = await gymDB.softDeleteMember(id)
   if (!deleted) {
     return NextResponse.json({ success: false, message: 'Member not found or already archived' }, { status: 404 })
   }
   return NextResponse.json({ success: true, message: 'Member archived successfully' })
 }
+
