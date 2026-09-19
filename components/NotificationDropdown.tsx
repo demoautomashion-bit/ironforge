@@ -36,13 +36,6 @@ export function NotificationDropdown({
       time: 'Within 7 Days',
       type: 'dueSoon' as const,
     })),
-    {
-      id: 'system-sync',
-      title: 'Portal Synced Successfully',
-      desc: 'All athlete fee registers up to date.',
-      time: 'Just now',
-      type: 'info' as const,
-    },
   ]
 
   return (
@@ -69,43 +62,41 @@ export function NotificationDropdown({
 
       {/* List */}
       <div className="mt-3 max-h-80 space-y-2 overflow-y-auto">
-        {notifications.map((n) => (
-          <div
-            key={n.id}
-            onClick={() => {
-              if (n.type !== 'info') {
+        {notifications.length === 0 ? (
+          <div className="py-8 text-center text-xs text-white/40">
+            No active payment warnings or overdue notifications.
+          </div>
+        ) : (
+          notifications.map((n) => (
+            <div
+              key={n.id}
+              onClick={() => {
                 onNavigateToPayments()
                 onClose()
-              }
-            }}
-            className={`flex items-start gap-3 rounded-xl border p-3 transition ${
-              n.type !== 'info' ? 'cursor-pointer hover:border-white/20' : ''
-            } ${
-              n.type === 'overdue'
-                ? 'border-rose-500/20 bg-rose-500/5'
-                : n.type === 'dueSoon'
-                ? 'border-amber-400/20 bg-amber-400/5'
-                : 'border-white/[0.06] bg-white/[0.02]'
-            }`}
-          >
-            <div className="mt-0.5">
-              {n.type === 'overdue' ? (
-                <AlertTriangle className="size-4 text-rose-400" />
-              ) : n.type === 'dueSoon' ? (
-                <Clock3 className="size-4 text-amber-400" />
-              ) : (
-                <Check className="size-4 text-[#ccff00]" />
-              )}
+              }}
+              className={`flex items-start gap-3 rounded-xl border p-3 transition cursor-pointer hover:border-white/20 ${
+                n.type === 'overdue'
+                  ? 'border-rose-500/20 bg-rose-500/5'
+                  : 'border-amber-400/20 bg-amber-400/5'
+              }`}
+            >
+              <div className="mt-0.5">
+                {n.type === 'overdue' ? (
+                  <AlertTriangle className="size-4 text-rose-400" />
+                ) : (
+                  <Clock3 className="size-4 text-amber-400" />
+                )}
+              </div>
+              <div className="flex-1">
+                <p className="text-xs font-bold text-white">{n.title}</p>
+                <p className="mt-0.5 text-[11px] text-white/50">{n.desc}</p>
+                <p className="mt-1 text-[9px] font-bold uppercase tracking-wider text-white/35">
+                  {n.time}
+                </p>
+              </div>
             </div>
-            <div className="flex-1">
-              <p className="text-xs font-bold text-white">{n.title}</p>
-              <p className="mt-0.5 text-[11px] text-white/50">{n.desc}</p>
-              <p className="mt-1 text-[9px] font-bold uppercase tracking-wider text-white/35">
-                {n.time}
-              </p>
-            </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
 
       {/* Footer */}

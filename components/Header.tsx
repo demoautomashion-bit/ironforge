@@ -10,6 +10,8 @@ interface HeaderProps {
   onOpenCommandPalette: () => void
   onToggleNotifications: () => void
   unreadCount?: number
+  gymName?: string
+  location?: string
 }
 
 export function Header({
@@ -18,7 +20,9 @@ export function Header({
   setActiveTab,
   onOpenCommandPalette,
   onToggleNotifications,
-  unreadCount = 2,
+  unreadCount = 0,
+  gymName = 'Iron District PK',
+  location = 'Karachi, PK',
 }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
@@ -40,7 +44,7 @@ export function Header({
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <p className="text-base font-black tracking-tight text-white sm:text-lg">IRON DISTRICT</p>
+                <p className="text-base font-black tracking-tight text-white sm:text-lg uppercase">{gymName}</p>
                 <span className="hidden rounded-full border border-[#ccff00]/30 bg-[#ccff00]/10 px-2 py-0.5 text-[10px] font-semibold text-[#ccff00] sm:inline-block">
                   PKR Portal
                 </span>
@@ -151,7 +155,7 @@ export function Header({
               <span className="flex items-center gap-1.5 text-white/60">
                 <Activity className="size-3.5 text-[#ccff00]" /> Live System Active
               </span>
-              <span>Karachi, PK</span>
+              <span>{location}</span>
             </div>
           </div>
         )}

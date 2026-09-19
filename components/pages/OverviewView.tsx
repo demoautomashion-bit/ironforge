@@ -9,9 +9,19 @@ interface OverviewViewProps {
   members: Member[]
   onNavigateToMembers: () => void
   onOpenAddMember: () => void
+  gymName?: string
+  standardFee?: number
+  treadmillFee?: number
 }
 
-export function OverviewView({ members, onNavigateToMembers, onOpenAddMember }: OverviewViewProps) {
+export function OverviewView({
+  members,
+  onNavigateToMembers,
+  onOpenAddMember,
+  gymName = 'Iron District PK',
+  standardFee = 5000,
+  treadmillFee = 7500,
+}: OverviewViewProps) {
   const currentDateFormatted = new Date().toLocaleDateString('en-US', {
     weekday: 'long',
     month: 'long',
@@ -137,7 +147,7 @@ export function OverviewView({ members, onNavigateToMembers, onOpenAddMember }: 
               </div>
               <div className="text-right">
                 <p className="text-sm font-extrabold text-white">{standardCount} Athletes</p>
-                <p className="text-[10px] text-white/40">Rs. 5,000 / mo</p>
+                <p className="text-[10px] text-white/40">{formatPKR(standardFee)} / mo</p>
               </div>
             </div>
 
@@ -152,7 +162,7 @@ export function OverviewView({ members, onNavigateToMembers, onOpenAddMember }: 
               </div>
               <div className="text-right">
                 <p className="text-sm font-extrabold text-[#ccff00]">{treadmillCount} Athletes</p>
-                <p className="text-[10px] text-white/40">Rs. 7,500 / mo</p>
+                <p className="text-[10px] text-white/40">{formatPKR(treadmillFee)} / mo</p>
               </div>
             </div>
           </div>
@@ -166,7 +176,7 @@ export function OverviewView({ members, onNavigateToMembers, onOpenAddMember }: 
             <ShieldCheck className="size-5 text-[#ccff00]" />
           </div>
           <div>
-            <p className="text-xs font-bold text-white">Iron District PK Portal Active</p>
+            <p className="text-xs font-bold text-white">{gymName} Portal Active</p>
             <p className="text-[11px] text-white/40">All member records & PKR fee registers synced.</p>
           </div>
         </div>

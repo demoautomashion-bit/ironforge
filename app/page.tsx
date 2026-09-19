@@ -16,7 +16,14 @@ import { CommandPalette } from '@/components/CommandPalette'
 import { NotificationDropdown } from '@/components/NotificationDropdown'
 
 export default function Page() {
-  const [members, setMembers] = useState<Member[]>(initialMembers)
+  const [members, setMembers] = useState<Member[]>([])
+  const [settings, setSettings] = useState({
+    gymName: 'Iron District PK',
+    location: 'Karachi, Pakistan',
+    standardFee: 5000,
+    treadmillFee: 7500,
+    themeColor: 'lime' as ThemeColor,
+  })
   const [addModalOpen, setAddModalOpen] = useState(false)
   const [selectedMember, setSelectedMember] = useState<Member | null>(null)
   const [receiptMember, setReceiptMember] = useState<Member | null>(null)
@@ -31,6 +38,22 @@ export default function Page() {
     setToastMessage(msg)
     setTimeout(() => setToastMessage(null), 3000)
   }
+
+  // Fetch settings from backend API
+  const fetchSettings = useCallback(async () => {
+    try {
+      const res = await fetch('/api/settings')
+      if (res.ok) {
+        const json = await res.json()
+        if (json.success && json.data) {
+          setSettings(json.data)
+          if (json.data.themeColor) setThemeColor(json.data.themeColor)
+        }
+      }
+    } catch (e) {
+      console.warn('Settings fetch fallback', e)
+    }
+  }, [])
 
   // Fetch roster from backend API
   const fetchMembers = useCallback(async () => {
@@ -48,8 +71,9 @@ export default function Page() {
   }, [])
 
   useEffect(() => {
+    fetchSettings()
     fetchMembers()
-  }, [fetchMembers])
+  }, [fetchSettings, fetchMembers])
 
   // Execute ACID payment transaction via API
   async function handleMarkPaid(id: string) {
@@ -163,6 +187,8 @@ export default function Page() {
           onOpenCommandPalette={() => setCommandPaletteOpen(true)}
           onToggleNotifications={() => setNotificationsOpen(!notificationsOpen)}
           unreadCount={members.filter((m) => m.status === 'Overdue').length}
+          gymName={settings.gymName}
+          location={settings.location}
         />
 
         {/* Notification Dropdown Popover */}
@@ -181,6 +207,9 @@ export default function Page() {
             members={members}
             onNavigateToMembers={() => setActiveTab('members')}
             onOpenAddMember={() => setAddModalOpen(true)}
+            gymName={settings.gymName}
+            standardFee={settings.standardFee}
+            treadmillFee={settings.treadmillFee}
           />
         )}
 
@@ -206,7 +235,10 @@ export default function Page() {
           <SettingsView
             onShowToast={showToast}
             currentTheme={themeColor}
-            onThemeChange={(t) => setThemeColor(t)}
+            onThemeChange={(t) => {
+              setThemeColor(t)
+              fetchSettings()
+            }}
           />
         )}
       </div>
@@ -232,12 +264,14 @@ export default function Page() {
         member={deleteModalMember}
         onClose={() => setDeleteModalMember(null)}
         onConfirmDelete={handleDeleteMember}
+        gymName={settings.gymName}
       />
 
       {/* Digital Receipt Modal */}
       <PaymentReceiptModal
         member={receiptMember}
         onClose={() => setReceiptMember(null)}
+        gymName={settings.gymName}
       />
 
       {/* Global Command Palette (Ctrl + K) */}

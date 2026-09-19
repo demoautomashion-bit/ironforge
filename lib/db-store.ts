@@ -31,34 +31,7 @@ class NeonGymDatabase {
   private seeded = false
 
   private async ensureSeed() {
-    if (this.seeded) return
-    try {
-      const count = await prisma.member.count({ where: { deletedAt: null } })
-      if (count === 0) {
-        // Seed initial mock members into Neon PostgreSQL
-        for (const m of initialMembers) {
-          await prisma.member.create({
-            data: {
-              id: m.id,
-              name: m.name,
-              initials: m.initials,
-              phone: m.phone || null,
-              gender: m.gender,
-              plan: m.plan,
-              monthlyFee: m.monthlyFee,
-              joinDate: m.joinDate,
-              paymentDate: m.paymentDate,
-              status: m.status,
-              color: m.color,
-            },
-          })
-        }
-        await this.logAudit('NEON_DB_SEEDED', 'Initial athlete roster seeded into Neon PostgreSQL cloud database.')
-      }
-      this.seeded = true
-    } catch (e) {
-      console.error('Neon seed error:', e)
-    }
+    this.seeded = true
   }
 
   public async logAudit(action: string, details: string) {

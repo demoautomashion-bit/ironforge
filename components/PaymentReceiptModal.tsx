@@ -7,9 +7,10 @@ import { formatPKR } from '@/lib/mock-data'
 interface PaymentReceiptModalProps {
   member: Member | null
   onClose: () => void
+  gymName?: string
 }
 
-export function PaymentReceiptModal({ member, onClose }: PaymentReceiptModalProps) {
+export function PaymentReceiptModal({ member, onClose, gymName = 'Iron District PK' }: PaymentReceiptModalProps) {
   if (!member) return null
 
   const receiptId = `IDP-${member.id.padStart(5, '0')}`
@@ -47,7 +48,7 @@ export function PaymentReceiptModal({ member, onClose }: PaymentReceiptModalProp
             <Dumbbell className="size-5" />
           </div>
           <div>
-            <h3 className="text-base font-black tracking-tight text-white">IRON DISTRICT PK</h3>
+            <h3 className="text-base font-black tracking-tight text-white uppercase">{gymName}</h3>
             <p className="text-[10px] font-bold uppercase tracking-wider text-[#ccff00]">Official Payment Receipt</p>
           </div>
         </div>

@@ -7,12 +7,14 @@ interface DeleteConfirmModalProps {
   member: Member | null
   onClose: () => void
   onConfirmDelete: (id: string) => void
+  gymName?: string
 }
 
 export function DeleteConfirmModal({
   member,
   onClose,
   onConfirmDelete,
+  gymName = 'Iron District PK',
 }: DeleteConfirmModalProps) {
   if (!member) return null
 
@@ -47,7 +49,7 @@ export function DeleteConfirmModal({
         {/* Content */}
         <div className="my-5 space-y-3 text-xs text-white/70">
           <p>
-            Are you sure you want to remove <strong className="text-white font-extrabold">{member.name}</strong> from the Iron District PK roster?
+            Are you sure you want to remove <strong className="text-white font-extrabold">{member.name}</strong> from the {gymName} roster?
           </p>
           <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-3.5 space-y-1 text-xs">
             <div className="flex justify-between">
