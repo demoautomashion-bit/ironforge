@@ -1,6 +1,6 @@
 'use client'
 
-import { FormEvent } from 'react'
+import { FormEvent, useState } from 'react'
 import { X, Dumbbell } from 'lucide-react'
 import { Gender, Member, PlanTier } from '@/lib/types'
 
@@ -11,24 +11,37 @@ interface AddMemberDrawerProps {
 }
 
 export function AddMemberDrawer({ open, onClose, onAddMember }: AddMemberDrawerProps) {
+  const [selectedPlan, setSelectedPlan] = useState<PlanTier>('Standard Gym')
+  const [fee, setFee] = useState<number>(5000)
+
   if (!open) return null
+
+  function handlePlanChange(newPlan: PlanTier) {
+    setSelectedPlan(newPlan)
+    if (newPlan === 'Standard Gym') {
+      setFee(5000)
+    } else {
+      setFee(7500)
+    }
+  }
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     const form = new FormData(event.currentTarget)
 
-    const name = String(form.get('name') || 'New Athlete')
-    const phone = String(form.get('phone') || '0300-0000000')
+    const name = String(form.get('name') || 'New Athlete').trim()
+    const phoneInput = String(form.get('phone') || '').trim()
     const gender = String(form.get('gender') || 'Male') as Gender
-    const plan = String(form.get('plan') || 'Cardio + Gym') as PlanTier
-    const monthlyFee = Number(form.get('fee')) || 6500
+    const plan = selectedPlan
+    const monthlyFee = Number(form.get('fee')) || (plan === 'Standard Gym' ? 5000 : 7500)
 
     const initials = name
       .split(' ')
+      .filter(Boolean)
       .map((n) => n[0])
       .join('')
       .slice(0, 2)
-      .toUpperCase()
+      .toUpperCase() || 'NA'
 
     const todayStr = new Date().toLocaleDateString('en-US', {
       month: 'short',
@@ -42,7 +55,7 @@ export function AddMemberDrawer({ open, onClose, onAddMember }: AddMemberDrawerP
     onAddMember({
       name,
       initials,
-      phone,
+      phone: phoneInput || undefined,
       gender,
       plan,
       monthlyFee,
@@ -60,10 +73,10 @@ export function AddMemberDrawer({ open, onClose, onAddMember }: AddMemberDrawerP
       role="dialog"
       aria-modal="true"
       aria-label="Add new gym member"
-      className="fixed inset-0 z-50 flex items-end justify-center bg-black/80 backdrop-blur-md transition-all sm:items-center p-0 sm:p-4 animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 flex items-end justify-center bg-black/80 backdrop-blur-md transition-all sm:items-center p-0 sm:p-4 animate-in fade-in duration-300 ease-out"
     >
       {/* Container: Bottom Sheet on Mobile, Centered Modal on Desktop */}
-      <div className="w-full max-w-lg rounded-t-3xl border-t border-white/15 bg-[#111513] p-6 shadow-2xl sm:rounded-3xl sm:border border-white/10 animate-in slide-in-from-bottom duration-300">
+      <div className="w-full max-w-lg rounded-t-3xl border-t border-white/15 bg-[#111513] p-6 shadow-2xl sm:rounded-3xl sm:border border-white/10 animate-in slide-in-from-bottom duration-300 ease-out will-change-transform">
         {/* Top Handle bar for mobile drag feeling */}
         <div className="mx-auto mb-4 h-1.5 w-12 rounded-full bg-white/20 sm:hidden" />
 
@@ -91,12 +104,12 @@ export function AddMemberDrawer({ open, onClose, onAddMember }: AddMemberDrawerP
         <form onSubmit={handleSubmit} className="grid gap-4 sm:grid-cols-2">
           {/* Full Name */}
           <label className="grid gap-1.5 text-xs font-bold text-white/70 sm:col-span-2">
-            Full Name
+            Full Name *
             <input
               name="name"
               required
               placeholder="e.g. Shahzaib Khan"
-              className="h-11 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 text-sm font-normal text-white outline-none focus:border-[#ccff00]/60 focus:bg-white/[0.06]"
+              className="h-11 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 text-sm font-normal text-white outline-none focus:border-[#ccff00]/60 focus:bg-white/[0.06] transition"
             />
           </label>
 
@@ -105,35 +118,34 @@ export function AddMemberDrawer({ open, onClose, onAddMember }: AddMemberDrawerP
             Gender
             <select
               name="gender"
-              className="h-11 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 text-sm font-normal text-white outline-none focus:border-[#ccff00]/60 focus:bg-[#111513]"
+              className="h-11 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 text-sm font-normal text-white outline-none focus:border-[#ccff00]/60 focus:bg-[#111513] transition"
             >
               <option className="bg-[#111513]">Male</option>
               <option className="bg-[#111513]">Female</option>
             </select>
           </label>
 
-          {/* Phone (Pakistani format) */}
+          {/* Phone (Optional) */}
           <label className="grid gap-1.5 text-xs font-bold text-white/70">
-            Phone Number (PK)
+            Phone Number <span className="text-white/40 font-normal">(Optional)</span>
             <input
               name="phone"
-              required
               placeholder="0300-1234567"
-              className="h-11 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 text-sm font-normal text-white outline-none focus:border-[#ccff00]/60 focus:bg-white/[0.06]"
+              className="h-11 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 text-sm font-normal text-white outline-none focus:border-[#ccff00]/60 focus:bg-white/[0.06] transition"
             />
           </label>
 
-          {/* Membership Plan */}
+          {/* Membership Plan (2 options) */}
           <label className="grid gap-1.5 text-xs font-bold text-white/70">
             Membership Plan
             <select
               name="plan"
-              className="h-11 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 text-sm font-normal text-white outline-none focus:border-[#ccff00]/60 focus:bg-[#111513]"
+              value={selectedPlan}
+              onChange={(e) => handlePlanChange(e.target.value as PlanTier)}
+              className="h-11 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 text-sm font-normal text-white outline-none focus:border-[#ccff00]/60 focus:bg-[#111513] transition"
             >
-              <option className="bg-[#111513]">Cardio + Gym</option>
-              <option className="bg-[#111513]">Basic Gym</option>
-              <option className="bg-[#111513]">VIP Personal Training</option>
-              <option className="bg-[#111513]">Crossfit Special</option>
+              <option value="Standard Gym" className="bg-[#111513]">Standard Gym</option>
+              <option value="Treadmill Pro" className="bg-[#111513]">Treadmill Pro</option>
             </select>
           </label>
 
@@ -148,9 +160,10 @@ export function AddMemberDrawer({ open, onClose, onAddMember }: AddMemberDrawerP
                 name="fee"
                 type="number"
                 required
-                defaultValue={6500}
-                placeholder="6500"
-                className="h-11 w-full rounded-xl border border-white/10 bg-white/[0.04] pl-11 pr-3.5 text-sm font-extrabold text-white outline-none focus:border-[#ccff00]/60 focus:bg-white/[0.06]"
+                value={fee}
+                onChange={(e) => setFee(Number(e.target.value))}
+                placeholder="5000"
+                className="h-11 w-full rounded-xl border border-white/10 bg-white/[0.04] pl-11 pr-3.5 text-sm font-extrabold text-white outline-none focus:border-[#ccff00]/60 focus:bg-white/[0.06] transition"
               />
             </div>
           </label>
@@ -160,7 +173,7 @@ export function AddMemberDrawer({ open, onClose, onAddMember }: AddMemberDrawerP
             <button
               type="button"
               onClick={onClose}
-              className="h-11 flex-1 rounded-xl border border-white/10 text-sm font-bold text-white/60 transition hover:bg-white/5 hover:text-white"
+              className="h-11 flex-1 rounded-xl border border-white/10 text-sm font-bold text-white/60 transition hover:bg-white/5 hover:text-white active:scale-98"
             >
               Cancel
             </button>

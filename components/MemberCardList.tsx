@@ -1,6 +1,6 @@
 'use client'
 
-import { Check, Ellipsis, MessageSquare, PhoneCall, Calendar } from 'lucide-react'
+import { Check, Ellipsis, PhoneCall, Calendar } from 'lucide-react'
 import { Member } from '@/lib/types'
 import { avatarColors, formatPKR } from '@/lib/mock-data'
 
@@ -11,17 +11,6 @@ interface MemberCardListProps {
 }
 
 export function MemberCardList({ members, onMarkPaid, onOpenActionSheet }: MemberCardListProps) {
-  function openWhatsApp(phone: string, name: string, fee: number) {
-    const formattedPhone = phone.replace(/[^0-9]/g, '')
-    const internationalPhone = formattedPhone.startsWith('0') ? '92' + formattedPhone.slice(1) : formattedPhone
-    const text = encodeURIComponent(
-      `Assalam-o-Alaikum ${name}, this is a friendly reminder from Iron District Gym regarding your monthly dues of ${formatPKR(
-        fee
-      )}. Please complete your payment at your earliest convenience. Thank you!`
-    )
-    window.open(`https://wa.me/${internationalPhone}?text=${text}`, '_blank')
-  }
-
   if (members.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-white/15 bg-white/[0.02] py-12 px-4 text-center">
@@ -36,17 +25,21 @@ export function MemberCardList({ members, onMarkPaid, onOpenActionSheet }: Membe
       {members.map((member) => (
         <div
           key={member.id}
-          className="group relative rounded-2xl border border-white/[0.08] bg-[#0d100f] p-4 transition-all hover:border-white/20 active:scale-[0.99]"
+          className="group relative rounded-2xl border border-white/[0.08] bg-[#0d100f] p-4 transition-all duration-200 hover:border-white/20 active:scale-[0.99]"
         >
           {/* Top Row: Avatar, Name, Plan, and Status Badge */}
           <div className="flex items-start justify-between gap-3">
             <div className="flex items-center gap-3">
-              <div className={`flex size-11 items-center justify-center rounded-2xl text-xs font-black shadow-inner ${avatarColors[member.color]}`}>
+              <div className={`flex size-11 items-center justify-center rounded-2xl text-xs font-black shadow-inner transition-transform duration-200 group-hover:scale-105 ${avatarColors[member.color]}`}>
                 {member.initials}
               </div>
               <div>
                 <h3 className="text-base font-extrabold text-white">{member.name}</h3>
-                <span className="inline-block rounded-md bg-white/[0.06] px-2 py-0.5 text-[10px] font-semibold text-white/60">
+                <span className={`inline-block rounded-md px-2 py-0.5 text-[10px] font-semibold ${
+                  member.plan === 'Treadmill Pro'
+                    ? 'bg-[#ccff00]/15 text-[#ccff00] border border-[#ccff00]/30'
+                    : 'bg-white/[0.06] text-white/60'
+                }`}>
                   {member.plan}
                 </span>
               </div>
@@ -67,7 +60,8 @@ export function MemberCardList({ members, onMarkPaid, onOpenActionSheet }: Membe
             </div>
             <div className="col-span-2 flex items-center justify-between border-t border-white/[0.05] pt-2 mt-1">
               <span className="flex items-center gap-1.5 text-white/50 text-[11px]">
-                <PhoneCall className="size-3 text-[#ccff00]" /> {member.phone}
+                <PhoneCall className="size-3 text-[#ccff00]" />
+                {member.phone ? member.phone : <span className="italic text-white/30">No Contact</span>}
               </span>
               <span className="flex items-center gap-1 text-white/40 text-[10px]">
                 <Calendar className="size-3" /> Joined {member.joinDate}
@@ -77,23 +71,14 @@ export function MemberCardList({ members, onMarkPaid, onOpenActionSheet }: Membe
 
           {/* Action Buttons Row */}
           <div className="mt-3.5 flex items-center justify-between gap-2 border-t border-white/[0.06] pt-3">
-            {/* WhatsApp Reminder Button */}
-            <button
-              onClick={() => openWhatsApp(member.phone, member.name, member.monthlyFee)}
-              className="flex h-10 flex-1 items-center justify-center gap-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-xs font-bold text-emerald-400 transition hover:bg-emerald-500/20 active:scale-95"
-            >
-              <MessageSquare className="size-3.5" />
-              <span>WhatsApp</span>
-            </button>
-
             {/* Mark Fee Paid Toggle */}
             <button
               onClick={() => onMarkPaid(member.id)}
               disabled={member.status === 'Active'}
-              className={`flex h-10 flex-1 items-center justify-center gap-1.5 rounded-xl border text-xs font-bold transition active:scale-95 ${
+              className={`flex h-10 flex-1 items-center justify-center gap-1.5 rounded-xl border text-xs font-bold transition-all duration-200 active:scale-95 ${
                 member.status === 'Active'
                   ? 'border-white/10 bg-white/[0.04] text-white/30 cursor-not-allowed'
-                  : 'border-[#ccff00]/40 bg-[#ccff00]/10 text-[#ccff00] hover:bg-[#ccff00]/20'
+                  : 'border-[#ccff00]/40 bg-[#ccff00]/10 text-[#ccff00] hover:bg-[#ccff00]/20 shadow-[0_0_15px_rgba(204,255,0,0.15)]'
               }`}
             >
               <Check className="size-3.5" />
@@ -104,7 +89,7 @@ export function MemberCardList({ members, onMarkPaid, onOpenActionSheet }: Membe
             <button
               aria-label={`Options for ${member.name}`}
               onClick={() => onOpenActionSheet(member)}
-              className="flex size-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-white/60 transition hover:bg-white/10 hover:text-white"
+              className="flex size-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-white/60 transition hover:bg-white/10 hover:text-white active:scale-95"
             >
               <Ellipsis className="size-4" />
             </button>

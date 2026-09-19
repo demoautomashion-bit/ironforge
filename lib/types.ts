@@ -1,12 +1,12 @@
 export type Gender = 'Male' | 'Female'
 export type Status = 'Active' | 'Due Soon' | 'Overdue'
-export type PlanTier = 'Basic Gym' | 'Cardio + Gym' | 'VIP Personal Training' | 'Crossfit Special'
+export type PlanTier = 'Standard Gym' | 'Treadmill Pro'
 
 export interface Member {
   id: string
   name: string
   initials: string
-  phone: string
+  phone?: string
   gender: Gender
   plan: PlanTier
   monthlyFee: number // in PKR
@@ -24,3 +24,4 @@ export interface MetricData {
   positive?: boolean
   color: 'lime' | 'yellow' | 'red' | 'sky'
 }
+

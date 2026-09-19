@@ -1,44 +1,27 @@
 'use client'
 
-// Deployment check trigger
-import { useMemo, useState } from 'react'
-import { Activity, ChevronDown, Sparkles } from 'lucide-react'
+import { useState } from 'react'
 import { initialMembers } from '@/lib/mock-data'
-import { Gender, Member, Status } from '@/lib/types'
+import { Member } from '@/lib/types'
 import { Header } from '@/components/Header'
-import { StatsOverview } from '@/components/StatsOverview'
-import { MemberFilters } from '@/components/MemberFilters'
-import { MemberCardList } from '@/components/MemberCardList'
-import { MemberTable } from '@/components/MemberTable'
+import { OverviewView } from '@/components/pages/OverviewView'
+import { MembersView } from '@/components/pages/MembersView'
+import { PaymentsView } from '@/components/pages/PaymentsView'
+import { SettingsView } from '@/components/pages/SettingsView'
 import { AddMemberDrawer } from '@/components/AddMemberDrawer'
 import { MemberActionSheet } from '@/components/MemberActionSheet'
 
 export default function Page() {
   const [members, setMembers] = useState<Member[]>(initialMembers)
-  const [gender, setGender] = useState<'All' | Gender>('All')
-  const [status, setStatus] = useState<'All' | Status>('All')
-  const [query, setQuery] = useState('')
   const [addModalOpen, setAddModalOpen] = useState(false)
   const [selectedMember, setSelectedMember] = useState<Member | null>(null)
-  const [activeTab, setActiveTab] = useState('members')
+  const [activeTab, setActiveTab] = useState('overview')
   const [toastMessage, setToastMessage] = useState<string | null>(null)
 
   function showToast(msg: string) {
     setToastMessage(msg)
     setTimeout(() => setToastMessage(null), 3000)
   }
-
-  const filteredMembers = useMemo(() => {
-    return members.filter((member) => {
-      const matchesGender = gender === 'All' || member.gender === gender
-      const matchesStatus = status === 'All' || member.status === status
-      const matchesQuery =
-        member.name.toLowerCase().includes(query.toLowerCase()) ||
-        member.phone.includes(query) ||
-        member.plan.toLowerCase().includes(query.toLowerCase())
-      return matchesGender && matchesStatus && matchesQuery
-    })
-  }, [gender, members, query, status])
 
   function handleMarkPaid(id: string) {
     setMembers((prev) =>
@@ -75,13 +58,6 @@ export default function Page() {
     showToast(`Removed ${target?.name || 'member'} from roster.`)
   }
 
-  const currentDateFormatted = new Date().toLocaleDateString('en-US', {
-    weekday: 'long',
-    month: 'long',
-    day: '2-digit',
-    year: 'numeric',
-  })
-
   return (
     <main className="min-h-screen bg-[#080a09] text-white pb-20 md:pb-12 font-sans selection:bg-[#ccff00] selection:text-black">
       {/* Toast Notification */}
@@ -91,80 +67,53 @@ export default function Page() {
         </div>
       )}
 
-      {/* Header */}
+      {/* Navigation Header */}
       <Header
         onOpenAddMember={() => setAddModalOpen(true)}
         activeTab={activeTab}
         setActiveTab={setActiveTab}
       />
 
-      {/* Main Container */}
-      <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 space-y-8">
-        {/* Welcome Dashboard Banner */}
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between border-b border-white/[0.06] pb-6">
-          <div>
-            <div className="mb-1.5 flex items-center gap-2">
-              <span className="size-2 rounded-full bg-[#ccff00] shadow-[0_0_8px_#ccff00]" />
-              <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#ccff00]">
-                {currentDateFormatted}
-              </p>
-            </div>
-            <h1 className="text-2xl font-black tracking-tight text-white sm:text-4xl">
-              Good morning, Admin 👋
-            </h1>
-            <p className="mt-1 text-xs text-white/50 sm:text-sm">
-              Manage Iron District PK gym members, PKR dues, and instant WhatsApp reminders.
-            </p>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs font-semibold text-white/70">
-              <Activity className="size-3.5 text-[#ccff00]" /> Live Dashboard
-            </span>
-          </div>
-        </div>
-
-        {/* Stats Metrics (PKR standard) */}
-        <StatsOverview members={members} />
-
-        {/* Member Roster Section */}
-        <section className="space-y-5 pt-2">
-          {/* Search and Filters */}
-          <MemberFilters
-            query={query}
-            setQuery={setQuery}
-            gender={gender}
-            setGender={setGender}
-            status={status}
-            setStatus={setStatus}
-            totalCount={members.length}
-            filteredCount={filteredMembers.length}
+      {/* Main View Container */}
+      <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+        {activeTab === 'overview' && (
+          <OverviewView
+            members={members}
+            onNavigateToMembers={() => setActiveTab('members')}
+            onOpenAddMember={() => setAddModalOpen(true)}
           />
+        )}
 
-          {/* Mobile Member Cards (visible on phones) */}
-          <MemberCardList
-            members={filteredMembers}
+        {activeTab === 'members' && (
+          <MembersView
+            members={members}
+            onMarkPaid={handleMarkPaid}
+            onOpenActionSheet={(member) => setSelectedMember(member)}
+            onOpenAddMember={() => setAddModalOpen(true)}
+          />
+        )}
+
+        {activeTab === 'payments' && (
+          <PaymentsView
+            members={members}
             onMarkPaid={handleMarkPaid}
             onOpenActionSheet={(member) => setSelectedMember(member)}
           />
+        )}
 
-          {/* Desktop Member Table (visible on md+) */}
-          <MemberTable
-            members={filteredMembers}
-            onMarkPaid={handleMarkPaid}
-            onOpenActionSheet={(member) => setSelectedMember(member)}
-          />
-        </section>
+        {activeTab === 'settings' && (
+          <SettingsView onShowToast={showToast} />
+        )}
       </div>
 
-      {/* Add Member Drawer/Modal */}
+      {/* Add Member Modal */}
       <AddMemberDrawer
         open={addModalOpen}
         onClose={() => setAddModalOpen(false)}
         onAddMember={handleAddMember}
       />
 
-      {/* Member Action Sheet (Mobile Ellipsis Details) */}
+      {/* Member Action Details Sheet */}
       <MemberActionSheet
         member={selectedMember}
         onClose={() => setSelectedMember(null)}

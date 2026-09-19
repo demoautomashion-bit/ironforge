@@ -1,6 +1,6 @@
 'use client'
 
-import { X, Check, MessageSquare, Trash2, Phone, Calendar, Dumbbell, ShieldAlert } from 'lucide-react'
+import { X, Check, Trash2, Phone, Calendar, Dumbbell, ShieldAlert } from 'lucide-react'
 import { Member } from '@/lib/types'
 import { avatarColors, formatPKR } from '@/lib/mock-data'
 
@@ -19,26 +19,14 @@ export function MemberActionSheet({
 }: MemberActionSheetProps) {
   if (!member) return null
 
-  function openWhatsApp() {
-    if (!member) return
-    const formattedPhone = member.phone.replace(/[^0-9]/g, '')
-    const internationalPhone = formattedPhone.startsWith('0') ? '92' + formattedPhone.slice(1) : formattedPhone
-    const text = encodeURIComponent(
-      `Assalam-o-Alaikum ${member.name}, this is a friendly payment reminder from Iron District Gym. Your monthly fee of ${formatPKR(
-        member.monthlyFee
-      )} is due. Kindly transfer or pay at the desk. JazakAllah!`
-    )
-    window.open(`https://wa.me/${internationalPhone}?text=${text}`, '_blank')
-  }
-
   return (
     <div
       role="dialog"
       aria-modal="true"
       aria-label="Member details and actions"
-      className="fixed inset-0 z-50 flex items-end justify-center bg-black/80 backdrop-blur-md transition-all p-0 sm:p-4 sm:items-center animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 flex items-end justify-center bg-black/80 backdrop-blur-md transition-all p-0 sm:p-4 sm:items-center animate-in fade-in duration-250 ease-out"
     >
-      <div className="w-full max-w-md rounded-t-3xl border-t border-white/15 bg-[#111513] p-6 shadow-2xl sm:rounded-3xl sm:border border-white/10 animate-in slide-in-from-bottom duration-300">
+      <div className="w-full max-w-md rounded-t-3xl border-t border-white/15 bg-[#111513] p-6 shadow-2xl sm:rounded-3xl sm:border border-white/10 animate-in slide-in-from-bottom duration-300 ease-out will-change-transform">
         {/* Mobile handle indicator */}
         <div className="mx-auto mb-4 h-1.5 w-12 rounded-full bg-white/20 sm:hidden" />
 
@@ -56,7 +44,7 @@ export function MemberActionSheet({
           <button
             aria-label="Close sheet"
             onClick={onClose}
-            className="rounded-xl border border-white/10 p-2 text-white/50 hover:bg-white/10 hover:text-white"
+            className="rounded-xl border border-white/10 p-2 text-white/50 hover:bg-white/10 hover:text-white transition"
           >
             <X className="size-5" />
           </button>
@@ -75,7 +63,9 @@ export function MemberActionSheet({
             <span className="flex items-center gap-2 text-white/50">
               <Phone className="size-3.5 text-white/60" /> Phone Number
             </span>
-            <span className="font-semibold text-white font-mono">{member.phone}</span>
+            <span className="font-semibold text-white font-mono">
+              {member.phone ? member.phone : <span className="text-white/30 italic font-sans">N/A (No contact)</span>}
+            </span>
           </div>
 
           <div className="flex items-center justify-between border-b border-white/[0.06] pb-2.5">
@@ -105,18 +95,6 @@ export function MemberActionSheet({
 
         {/* Actions List */}
         <div className="space-y-2">
-          {/* WhatsApp Reminder */}
-          <button
-            onClick={() => {
-              openWhatsApp()
-              onClose()
-            }}
-            className="flex w-full items-center justify-center gap-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 py-3 text-xs font-bold text-emerald-400 transition hover:bg-emerald-500/20 active:scale-95"
-          >
-            <MessageSquare className="size-4" />
-            <span>Send WhatsApp Payment Reminder (PKR)</span>
-          </button>
-
           {/* Mark Fee Paid */}
           <button
             onClick={() => {
@@ -127,7 +105,7 @@ export function MemberActionSheet({
             className={`flex w-full items-center justify-center gap-2 rounded-xl border py-3 text-xs font-bold transition active:scale-95 ${
               member.status === 'Active'
                 ? 'border-white/10 bg-white/[0.04] text-white/30 cursor-not-allowed'
-                : 'border-[#ccff00]/40 bg-[#ccff00]/10 text-[#ccff00] hover:bg-[#ccff00]/20'
+                : 'border-[#ccff00]/40 bg-[#ccff00]/10 text-[#ccff00] hover:bg-[#ccff00]/20 shadow-[0_0_15px_rgba(204,255,0,0.15)]'
             }`}
           >
             <Check className="size-4" />
