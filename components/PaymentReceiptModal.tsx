@@ -29,7 +29,7 @@ export function PaymentReceiptModal({ member, onClose, gymName = 'Iron District 
     >
       <div className="relative w-full max-w-md overflow-hidden rounded-3xl border border-white/20 bg-[#0e1210] p-6 shadow-2xl animate-in zoom-in-95 duration-200">
         {/* Top Watermark Stamp */}
-        <div className="absolute -right-6 -top-6 rotate-12 select-none rounded-full border-4 border-[#ccff00]/20 p-4 text-[10px] font-black uppercase tracking-widest text-[#ccff00]/15 pointer-events-none">
+        <div className="absolute -right-6 -top-6 rotate-12 select-none rounded-full border-4 border-theme-accent/20 p-4 text-[10px] font-black uppercase tracking-widest text-theme-accent/15 pointer-events-none">
           VERIFIED PKR PAYMENT
         </div>
 
@@ -44,12 +44,12 @@ export function PaymentReceiptModal({ member, onClose, gymName = 'Iron District 
 
         {/* Header Branding */}
         <div className="mb-6 flex items-center gap-3 border-b border-white/[0.08] pb-4">
-          <div className="flex size-10 items-center justify-center rounded-xl bg-[#ccff00] text-black font-black">
+          <div className="flex size-10 items-center justify-center rounded-xl bg-theme-accent text-theme-btn font-black">
             <Dumbbell className="size-5" />
           </div>
           <div>
             <h3 className="text-base font-black tracking-tight text-white uppercase">{gymName}</h3>
-            <p className="text-[10px] font-bold uppercase tracking-wider text-[#ccff00]">Official Payment Receipt</p>
+            <p className="text-[10px] font-bold uppercase tracking-wider text-theme-accent">Official Payment Receipt</p>
           </div>
         </div>
 
@@ -79,23 +79,23 @@ export function PaymentReceiptModal({ member, onClose, gymName = 'Iron District 
             </div>
             <div className="flex justify-between border-b border-white/[0.06] pb-2">
               <span className="text-white/50">Membership Tier</span>
-              <span className="font-bold text-[#ccff00]">{member.plan}</span>
+              <span className="font-bold text-theme-accent">{member.plan}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-white/50">Payment Status</span>
-              <span className="flex items-center gap-1 font-bold text-[#ccff00]">
+              <span className="flex items-center gap-1 font-bold text-theme-accent">
                 <CheckCircle2 className="size-3.5" /> PAID IN FULL
               </span>
             </div>
           </div>
 
           {/* Total PKR Box */}
-          <div className="flex items-center justify-between rounded-2xl border border-[#ccff00]/30 bg-[#ccff00]/10 p-4">
+          <div className="flex items-center justify-between rounded-2xl border border-theme-accent/30 bg-theme-accent/10 p-4">
             <div>
               <p className="text-[10px] uppercase font-bold text-white/60">Total Paid (PKR)</p>
-              <p className="text-2xl font-black text-[#ccff00]">{formatPKR(member.monthlyFee)}</p>
+              <p className="text-2xl font-black text-theme-accent">{formatPKR(member.monthlyFee)}</p>
             </div>
-            <div className="flex items-center gap-1 rounded-full bg-[#ccff00]/20 px-3 py-1 text-[11px] font-bold text-[#ccff00]">
+            <div className="flex items-center gap-1 rounded-full bg-theme-accent/20 px-3 py-1 text-[11px] font-bold text-theme-accent">
               <ShieldCheck className="size-3.5" /> Verified
             </div>
           </div>
@@ -111,7 +111,7 @@ export function PaymentReceiptModal({ member, onClose, gymName = 'Iron District 
           </button>
           <button
             onClick={() => window.print()}
-            className="flex h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-[#ccff00] text-xs font-black text-black shadow-[0_0_20px_rgba(204,255,0,0.2)] transition hover:bg-[#dcff63] active:scale-95"
+            className="flex h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-theme-accent text-xs font-black text-theme-btn shadow-[0_0_20px_rgba(var(--brand-accent-rgb),0.25)] transition hover:bg-theme-accent-hover active:scale-95"
           >
             <Printer className="size-4" />
             <span>Print Receipt</span>

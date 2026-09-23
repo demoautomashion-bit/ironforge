@@ -46,9 +46,9 @@ export function NotificationDropdown({
       {/* Header */}
       <div className="flex items-center justify-between border-b border-white/10 pb-3">
         <div className="flex items-center gap-2">
-          <Bell className="size-4 text-[#ccff00]" />
+          <Bell className="size-4 text-theme-accent" />
           <h3 className="text-sm font-extrabold text-white">System Notifications</h3>
-          <span className="rounded-full bg-[#ccff00]/20 px-2 py-0.5 text-[10px] font-bold text-[#ccff00]">
+          <span className="rounded-full bg-theme-accent/20 px-2 py-0.5 text-[10px] font-bold text-theme-accent">
             {notifications.length}
           </span>
         </div>
@@ -106,7 +106,7 @@ export function NotificationDropdown({
             onNavigateToPayments()
             onClose()
           }}
-          className="text-xs font-bold text-[#ccff00] hover:underline"
+          className="text-xs font-bold text-theme-accent hover:underline"
         >
           View All Dues in Payments &rarr;
         </button>

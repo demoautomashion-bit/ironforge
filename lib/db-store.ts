@@ -25,6 +25,9 @@ export interface DBSettings {
   standardFee: number
   treadmillFee: number
   themeColor: ThemeColor
+  morningShift?: string
+  ladiesShift?: string
+  eveningShift?: string
   updatedAt: string
 }
 
@@ -311,6 +314,9 @@ class NeonGymDatabase {
           standardFee: created.standardFee,
           treadmillFee: created.treadmillFee,
           themeColor: created.themeColor as any,
+          morningShift: '06:00 AM – 11:30 AM',
+          ladiesShift: '12:00 PM – 04:00 PM',
+          eveningShift: '04:30 PM – 11:00 PM',
           updatedAt: created.updatedAt.toISOString(),
         }
       }
@@ -321,6 +327,9 @@ class NeonGymDatabase {
         standardFee: s.standardFee,
         treadmillFee: s.treadmillFee,
         themeColor: s.themeColor as any,
+        morningShift: (s as any).morningShift || '06:00 AM – 11:30 AM',
+        ladiesShift: (s as any).ladiesShift || '12:00 PM – 04:00 PM',
+        eveningShift: (s as any).eveningShift || '04:30 PM – 11:00 PM',
         updatedAt: s.updatedAt.toISOString(),
       }
     } catch (e) {
@@ -331,6 +340,9 @@ class NeonGymDatabase {
         standardFee: 5000,
         treadmillFee: 7500,
         themeColor: 'lime',
+        morningShift: '06:00 AM – 11:30 AM',
+        ladiesShift: '12:00 PM – 04:00 PM',
+        eveningShift: '04:30 PM – 11:00 PM',
         updatedAt: new Date().toISOString(),
       }
     }
@@ -366,10 +378,30 @@ class NeonGymDatabase {
         standardFee: updated.standardFee,
         treadmillFee: updated.treadmillFee,
         themeColor: updated.themeColor as any,
+        morningShift: updates.morningShift || '06:00 AM – 11:30 AM',
+        ladiesShift: updates.ladiesShift || '12:00 PM – 04:00 PM',
+        eveningShift: updates.eveningShift || '04:30 PM – 11:00 PM',
         updatedAt: updated.updatedAt.toISOString(),
       }
     } catch (e) {
       return this.getSettings()
+    }
+  }
+
+  public async getAuditLogs(limit = 50) {
+    try {
+      const logs = await prisma.auditLog.findMany({
+        take: limit,
+        orderBy: { timestamp: 'desc' },
+      })
+      return logs.map((l) => ({
+        id: l.id,
+        action: l.action,
+        details: l.details,
+        timestamp: l.timestamp.toISOString(),
+      }))
+    } catch (e) {
+      return []
     }
   }
 

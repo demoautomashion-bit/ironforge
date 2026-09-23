@@ -14,6 +14,7 @@ import { PaymentReceiptModal } from '@/components/PaymentReceiptModal'
 import { DeleteConfirmModal } from '@/components/DeleteConfirmModal'
 import { CommandPalette } from '@/components/CommandPalette'
 import { NotificationDropdown } from '@/components/NotificationDropdown'
+import { AuditLogDrawer } from '@/components/AuditLogDrawer'
 
 export default function Page() {
   const [members, setMembers] = useState<Member[]>([])
@@ -28,6 +29,7 @@ export default function Page() {
   const [selectedMember, setSelectedMember] = useState<Member | null>(null)
   const [receiptMember, setReceiptMember] = useState<Member | null>(null)
   const [deleteModalMember, setDeleteModalMember] = useState<Member | null>(null)
+  const [auditLogsOpen, setAuditLogsOpen] = useState(false)
   const [activeTab, setActiveTab] = useState('overview')
   const [toastMessage, setToastMessage] = useState<string | null>(null)
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false)
@@ -258,6 +260,7 @@ export default function Page() {
             onShowToast={showToast}
             currentTheme={themeColor}
             onThemeChange={(t) => setThemeColor(t)}
+            onOpenAuditLogs={() => setAuditLogsOpen(true)}
             onSettingsSaved={(newSettings) => {
               setSettings(newSettings)
               setThemeColor(newSettings.themeColor)
@@ -300,6 +303,12 @@ export default function Page() {
         member={receiptMember}
         onClose={() => setReceiptMember(null)}
         gymName={settings.gymName}
+      />
+
+      {/* System Audit Activity Log Drawer */}
+      <AuditLogDrawer
+        open={auditLogsOpen}
+        onClose={() => setAuditLogsOpen(false)}
       />
 
       {/* Global Command Palette (Ctrl + K) */}

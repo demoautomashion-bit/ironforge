@@ -12,6 +12,7 @@ export function StatsOverview({ members }: StatsOverviewProps) {
   const activeCount = members.filter((m) => m.status === 'Active').length
   const dueSoonCount = members.filter((m) => m.status === 'Due Soon').length
   const overdueCount = members.filter((m) => m.status === 'Overdue').length
+  const totalMembers = members.length
 
   const totalCollectedPKR = members
     .filter((m) => m.status === 'Active')
@@ -21,24 +22,30 @@ export function StatsOverview({ members }: StatsOverviewProps) {
     .filter((m) => m.status === 'Overdue')
     .reduce((acc, m) => acc + m.monthlyFee, 0)
 
+  const totalExpectedPKR = members.reduce((acc, m) => acc + m.monthlyFee, 0)
+  const collectionRate = totalExpectedPKR > 0 ? Math.round((totalCollectedPKR / totalExpectedPKR) * 100) : 0
+  const activePercent = totalMembers > 0 ? Math.round((activeCount / totalMembers) * 100) : 0
+  const dueSoonPercent = totalMembers > 0 ? Math.round((dueSoonCount / totalMembers) * 100) : 0
+  const overduePercent = totalMembers > 0 ? Math.round((overdueCount / totalMembers) * 100) : 0
+
   const cards = [
     {
       id: 'revenue',
       icon: Banknote,
       label: 'Est. Monthly Revenue',
-      value: formatPKR(totalCollectedPKR || 420000),
+      value: formatPKR(totalCollectedPKR),
       detail: 'Active PKR collections',
-      change: '+14.2%',
-      positive: true,
+      change: `${collectionRate}% collected`,
+      positive: collectionRate >= 70,
       accentColor: 'lime',
     },
     {
       id: 'active',
       icon: UsersRound,
       label: 'Active Members',
-      value: `${activeCount + 242}`,
-      detail: 'Registered athletes',
-      change: '+12.5%',
+      value: `${activeCount}`,
+      detail: `Out of ${totalMembers} total athletes`,
+      change: `${activePercent}% active`,
       positive: true,
       accentColor: 'blue',
     },
@@ -47,9 +54,9 @@ export function StatsOverview({ members }: StatsOverviewProps) {
       icon: Clock3,
       label: 'Dues Expiring Soon',
       value: `${dueSoonCount}`,
-      detail: 'Needs payment check',
-      change: '4.2%',
-      positive: false,
+      detail: 'Requires payment follow-up',
+      change: `${dueSoonPercent}% of roster`,
+      positive: dueSoonCount === 0,
       accentColor: 'yellow',
     },
     {
@@ -57,9 +64,9 @@ export function StatsOverview({ members }: StatsOverviewProps) {
       icon: AlertTriangle,
       label: 'Overdue Dues (PKR)',
       value: formatPKR(totalOverduePKR),
-      detail: `${overdueCount} overdue members`,
-      change: '2.1%',
-      positive: false,
+      detail: `${overdueCount} overdue accounts`,
+      change: `${overduePercent}% overdue`,
+      positive: overdueCount === 0,
       accentColor: 'red',
     },
   ]
@@ -79,7 +86,7 @@ export function StatsOverview({ members }: StatsOverviewProps) {
                 <div
                   className={`flex size-10 items-center justify-center rounded-xl ${
                     card.accentColor === 'lime'
-                      ? 'bg-[#ccff00]/10 text-[#ccff00] border border-[#ccff00]/20'
+                      ? 'bg-theme-accent/10 text-theme-accent border border-theme-accent/20'
                       : card.accentColor === 'blue'
                       ? 'bg-sky-400/10 text-sky-400 border border-sky-400/20'
                       : card.accentColor === 'yellow'
@@ -92,7 +99,7 @@ export function StatsOverview({ members }: StatsOverviewProps) {
                 <span
                   className={`flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-bold ${
                     card.positive
-                      ? 'bg-[#ccff00]/10 text-[#ccff00]'
+                      ? 'bg-theme-accent/10 text-theme-accent'
                       : card.accentColor === 'red'
                       ? 'bg-rose-500/10 text-rose-400'
                       : 'bg-amber-400/10 text-amber-300'

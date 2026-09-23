@@ -8,12 +8,16 @@ interface SettingsViewProps {
   onShowToast: (msg: string) => void
   currentTheme?: ThemeColor
   onThemeChange?: (theme: ThemeColor) => void
+  onOpenAuditLogs?: () => void
   onSettingsSaved?: (settings: {
     gymName: string
     location: string
     standardFee: number
     treadmillFee: number
     themeColor: ThemeColor
+    morningShift?: string
+    ladiesShift?: string
+    eveningShift?: string
   }) => void
 }
 
@@ -21,6 +25,7 @@ export function SettingsView({
   onShowToast,
   currentTheme = 'lime',
   onThemeChange,
+  onOpenAuditLogs,
   onSettingsSaved,
 }: SettingsViewProps) {
   const [gymName, setGymName] = useState('Iron District PK')
@@ -28,6 +33,9 @@ export function SettingsView({
   const [currency] = useState('PKR (Rs.)')
   const [standardFee, setStandardFee] = useState(5000)
   const [treadmillFee, setTreadmillFee] = useState(7500)
+  const [morningShift, setMorningShift] = useState('06:00 AM – 11:30 AM')
+  const [ladiesShift, setLadiesShift] = useState('12:00 PM – 04:00 PM')
+  const [eveningShift, setEveningShift] = useState('04:30 PM – 11:00 PM')
   const [activeTheme, setActiveTheme] = useState<ThemeColor>(currentTheme)
   const [saved, setSaved] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -51,6 +59,9 @@ export function SettingsView({
             if (json.data.location) setLocation(json.data.location)
             if (json.data.standardFee) setStandardFee(json.data.standardFee)
             if (json.data.treadmillFee) setTreadmillFee(json.data.treadmillFee)
+            if (json.data.morningShift) setMorningShift(json.data.morningShift)
+            if (json.data.ladiesShift) setLadiesShift(json.data.ladiesShift)
+            if (json.data.eveningShift) setEveningShift(json.data.eveningShift)
             if (json.data.themeColor) {
               setActiveTheme(json.data.themeColor)
             }
@@ -77,6 +88,9 @@ export function SettingsView({
       location,
       standardFee,
       treadmillFee,
+      morningShift,
+      ladiesShift,
+      eveningShift,
       themeColor: activeTheme,
     }
     try {
@@ -88,7 +102,7 @@ export function SettingsView({
       if (res.ok) {
         setSaved(true)
         if (onSettingsSaved) onSettingsSaved(payload)
-        onShowToast('Settings & defaults saved to cloud successfully!')
+        onShowToast('Settings & shift hours saved to cloud successfully!')
         setTimeout(() => setSaved(false), 3000)
       } else {
         if (onSettingsSaved) onSettingsSaved(payload)
@@ -242,38 +256,58 @@ export function SettingsView({
             </div>
             <div>
               <h2 className="text-base font-extrabold text-white">Operational Shift Schedule</h2>
-              <p className="text-xs text-white/40">{gymName} daily operating hours</p>
+              <p className="text-xs text-white/40">Configure {gymName} daily shift hours</p>
             </div>
           </div>
 
-          <div className="grid gap-3 sm:grid-cols-3 text-xs">
-            <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3.5">
-              <p className="font-bold text-theme-accent">Morning Shift</p>
-              <p className="mt-1 font-semibold text-white">06:00 AM – 11:30 AM</p>
-              <p className="text-[10px] text-white/40">Open for all athletes</p>
-            </div>
-            <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3.5">
-              <p className="font-bold text-pink-400">Ladies Exclusive Shift</p>
-              <p className="mt-1 font-semibold text-white">12:00 PM – 04:00 PM</p>
-              <p className="text-[10px] text-white/40">Female trainers & athletes only</p>
-            </div>
-            <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3.5">
-              <p className="font-bold text-sky-400">Evening Peak Shift</p>
-              <p className="mt-1 font-semibold text-white">04:30 PM – 11:00 PM</p>
-              <p className="text-[10px] text-white/40">Open for all athletes</p>
-            </div>
+          <div className="grid gap-4 sm:grid-cols-3">
+            <label className="grid gap-1.5 text-xs font-bold text-theme-accent">
+              Morning Shift Hours
+              <input
+                type="text"
+                value={morningShift}
+                onChange={(e) => setMorningShift(e.target.value)}
+                placeholder="06:00 AM – 11:30 AM"
+                className="h-11 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 text-xs font-semibold text-white outline-none focus:border-theme-accent/60 transition"
+              />
+              <span className="text-[10px] font-normal text-white/40">Open for all athletes</span>
+            </label>
+
+            <label className="grid gap-1.5 text-xs font-bold text-pink-400">
+              Ladies Exclusive Shift Hours
+              <input
+                type="text"
+                value={ladiesShift}
+                onChange={(e) => setLadiesShift(e.target.value)}
+                placeholder="12:00 PM – 04:00 PM"
+                className="h-11 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 text-xs font-semibold text-white outline-none focus:border-pink-400/60 transition"
+              />
+              <span className="text-[10px] font-normal text-white/40">Female trainers & athletes only</span>
+            </label>
+
+            <label className="grid gap-1.5 text-xs font-bold text-sky-400">
+              Evening Peak Shift Hours
+              <input
+                type="text"
+                value={eveningShift}
+                onChange={(e) => setEveningShift(e.target.value)}
+                placeholder="04:30 PM – 11:00 PM"
+                className="h-11 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 text-xs font-semibold text-white outline-none focus:border-sky-400/60 transition"
+              />
+              <span className="text-[10px] font-normal text-white/40">Open for all athletes</span>
+            </label>
           </div>
         </div>
 
-        {/* Currency & Security */}
+        {/* Currency & Security Audit */}
         <div className="rounded-2xl border border-white/[0.08] bg-[#0d100f] p-6 space-y-4">
           <div className="flex items-center gap-3 pb-3 border-b border-white/[0.06]">
             <div className="flex size-9 items-center justify-center rounded-xl bg-violet-400/10 text-violet-400 border border-violet-400/20">
               <Shield className="size-4" />
             </div>
             <div>
-              <h2 className="text-base font-extrabold text-white">System Defaults</h2>
-              <p className="text-xs text-white/40">Regional currency & access</p>
+              <h2 className="text-base font-extrabold text-white">System Audit & Defaults</h2>
+              <p className="text-xs text-white/40">Regional currency & database audit logs</p>
             </div>
           </div>
 
@@ -288,15 +322,17 @@ export function SettingsView({
               />
             </label>
 
-            <label className="grid gap-1.5 text-xs font-bold text-white/70">
-              Admin Access Level
-              <input
-                type="text"
-                disabled
-                value="Super Admin (Full Access)"
-                className="h-11 rounded-xl border border-white/10 bg-white/[0.02] px-3.5 text-sm font-normal text-white/50 cursor-not-allowed"
-              />
-            </label>
+            <div className="grid gap-1.5 text-xs font-bold text-white/70">
+              <span>Database Activity Audit Logs</span>
+              <button
+                type="button"
+                onClick={onOpenAuditLogs}
+                className="flex h-11 items-center justify-center gap-2 rounded-xl border border-theme-accent/30 bg-theme-accent/10 px-4 text-xs font-bold text-theme-accent transition hover:bg-theme-accent/20 active:scale-95"
+              >
+                <Shield className="size-4" />
+                <span>View System Audit Activity Logs</span>
+              </button>
+            </div>
           </div>
         </div>
 
