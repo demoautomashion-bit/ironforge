@@ -108,7 +108,7 @@ export function SettingsView({
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-white/[0.08] pb-5">
         <div>
           <div className="flex items-center gap-2">
-            <Settings className="size-5 text-[#ccff00]" />
+            <Settings className="size-5 text-theme-accent" />
             <h1 className="text-2xl font-black tracking-tight text-white sm:text-3xl">
               Portal & Gym Settings
             </h1>
@@ -123,7 +123,7 @@ export function SettingsView({
         {/* Live Theme Accent Customizer */}
         <div className="rounded-2xl border border-white/[0.08] bg-[#0d100f] p-6 space-y-4">
           <div className="flex items-center gap-3 pb-3 border-b border-white/[0.06]">
-            <div className="flex size-9 items-center justify-center rounded-xl bg-[#ccff00]/10 text-[#ccff00] border border-[#ccff00]/20">
+            <div className="flex size-9 items-center justify-center rounded-xl bg-theme-accent/10 text-theme-accent border border-theme-accent/20">
               <Palette className="size-4" />
             </div>
             <div>
@@ -140,7 +140,7 @@ export function SettingsView({
                 onClick={() => handleThemeSelect(t.id)}
                 className={`flex items-center gap-3 rounded-xl border p-3 text-left transition ${
                   activeTheme === t.id
-                    ? 'border-[#ccff00] bg-white/[0.06] shadow-[0_0_15px_rgba(204,255,0,0.15)]'
+                    ? 'border-theme-accent bg-white/[0.06] shadow-[0_0_15px_rgba(var(--brand-accent-rgb),0.25)]'
                     : 'border-white/10 bg-white/[0.02] hover:bg-white/[0.05]'
                 }`}
               >
@@ -173,7 +173,7 @@ export function SettingsView({
                 type="text"
                 value={gymName}
                 onChange={(e) => setGymName(e.target.value)}
-                className="h-11 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 text-sm font-normal text-white outline-none focus:border-[#ccff00]/60 transition"
+                className="h-11 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 text-sm font-normal text-white outline-none focus:border-theme-accent/60 transition"
               />
             </label>
 
@@ -183,7 +183,7 @@ export function SettingsView({
                 type="text"
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
-                className="h-11 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 text-sm font-normal text-white outline-none focus:border-[#ccff00]/60 transition"
+                className="h-11 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 text-sm font-normal text-white outline-none focus:border-theme-accent/60 transition"
               />
             </label>
           </div>
@@ -192,7 +192,7 @@ export function SettingsView({
         {/* Plan Pricing Configuration */}
         <div className="rounded-2xl border border-white/[0.08] bg-[#0d100f] p-6 space-y-4">
           <div className="flex items-center gap-3 pb-3 border-b border-white/[0.06]">
-            <div className="flex size-9 items-center justify-center rounded-xl bg-[#ccff00]/10 text-[#ccff00] border border-[#ccff00]/20">
+            <div className="flex size-9 items-center justify-center rounded-xl bg-theme-accent/10 text-theme-accent border border-theme-accent/20">
               <Sliders className="size-4" />
             </div>
             <div>
@@ -205,14 +205,14 @@ export function SettingsView({
             <label className="grid gap-1.5 text-xs font-bold text-white/70">
               Standard Gym Monthly Fee
               <div className="relative">
-                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 font-bold text-[#ccff00] text-sm">
+                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 font-bold text-theme-accent text-sm">
                   Rs.
                 </span>
                 <input
                   type="number"
                   value={standardFee}
                   onChange={(e) => setStandardFee(Number(e.target.value))}
-                  className="h-11 w-full rounded-xl border border-white/10 bg-white/[0.04] pl-11 pr-3.5 text-sm font-extrabold text-white outline-none focus:border-[#ccff00]/60 transition"
+                  className="h-11 w-full rounded-xl border border-white/10 bg-white/[0.04] pl-11 pr-3.5 text-sm font-extrabold text-white outline-none focus:border-theme-accent/60 transition"
                 />
               </div>
             </label>
@@ -220,14 +220,14 @@ export function SettingsView({
             <label className="grid gap-1.5 text-xs font-bold text-white/70">
               Treadmill Pro Monthly Fee
               <div className="relative">
-                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 font-bold text-[#ccff00] text-sm">
+                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 font-bold text-theme-accent text-sm">
                   Rs.
                 </span>
                 <input
                   type="number"
                   value={treadmillFee}
                   onChange={(e) => setTreadmillFee(Number(e.target.value))}
-                  className="h-11 w-full rounded-xl border border-white/10 bg-white/[0.04] pl-11 pr-3.5 text-sm font-extrabold text-white outline-none focus:border-[#ccff00]/60 transition"
+                  className="h-11 w-full rounded-xl border border-white/10 bg-white/[0.04] pl-11 pr-3.5 text-sm font-extrabold text-white outline-none focus:border-theme-accent/60 transition"
                 />
               </div>
             </label>
@@ -242,13 +242,13 @@ export function SettingsView({
             </div>
             <div>
               <h2 className="text-base font-extrabold text-white">Operational Shift Schedule</h2>
-              <p className="text-xs text-white/40">Iron District PK daily operating hours</p>
+              <p className="text-xs text-white/40">{gymName} daily operating hours</p>
             </div>
           </div>
 
           <div className="grid gap-3 sm:grid-cols-3 text-xs">
             <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3.5">
-              <p className="font-bold text-[#ccff00]">Morning Shift</p>
+              <p className="font-bold text-theme-accent">Morning Shift</p>
               <p className="mt-1 font-semibold text-white">06:00 AM – 11:30 AM</p>
               <p className="text-[10px] text-white/40">Open for all athletes</p>
             </div>
@@ -304,7 +304,7 @@ export function SettingsView({
         <div className="flex items-center gap-3 pt-2">
           <button
             type="submit"
-            className="flex h-11 items-center gap-2 rounded-xl bg-[#ccff00] px-6 text-sm font-black text-black shadow-[0_0_20px_rgba(204,255,0,0.2)] transition hover:bg-[#dcff63] active:scale-95"
+            className="flex h-11 items-center gap-2 rounded-xl bg-theme-accent px-6 text-sm font-black text-theme-btn shadow-[0_0_20px_rgba(var(--brand-accent-rgb),0.25)] transition hover:bg-theme-accent-hover active:scale-95"
           >
             {saved ? <CheckCircle2 className="size-4 stroke-[3]" /> : <Save className="size-4 stroke-[3]" />}
             <span>{saved ? 'Saved!' : 'Save Preferences'}</span>

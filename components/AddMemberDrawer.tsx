@@ -8,20 +8,28 @@ interface AddMemberDrawerProps {
   open: boolean
   onClose: () => void
   onAddMember: (newMember: Omit<Member, 'id'>) => void
+  standardFee?: number
+  treadmillFee?: number
 }
 
-export function AddMemberDrawer({ open, onClose, onAddMember }: AddMemberDrawerProps) {
+export function AddMemberDrawer({
+  open,
+  onClose,
+  onAddMember,
+  standardFee = 5000,
+  treadmillFee = 7500,
+}: AddMemberDrawerProps) {
   const [selectedPlan, setSelectedPlan] = useState<PlanTier>('Standard Gym')
-  const [fee, setFee] = useState<number>(5000)
+  const [fee, setFee] = useState<number>(standardFee)
 
   if (!open) return null
 
   function handlePlanChange(newPlan: PlanTier) {
     setSelectedPlan(newPlan)
     if (newPlan === 'Standard Gym') {
-      setFee(5000)
+      setFee(standardFee)
     } else {
-      setFee(7500)
+      setFee(treadmillFee)
     }
   }
 
@@ -33,7 +41,7 @@ export function AddMemberDrawer({ open, onClose, onAddMember }: AddMemberDrawerP
     const phoneInput = String(form.get('phone') || '').trim()
     const gender = String(form.get('gender') || 'Male') as Gender
     const plan = selectedPlan
-    const monthlyFee = Number(form.get('fee')) || (plan === 'Standard Gym' ? 5000 : 7500)
+    const monthlyFee = Number(form.get('fee')) || (plan === 'Standard Gym' ? standardFee : treadmillFee)
 
     const initials = name
       .split(' ')
@@ -83,7 +91,7 @@ export function AddMemberDrawer({ open, onClose, onAddMember }: AddMemberDrawerP
         {/* Header */}
         <div className="mb-6 flex items-start justify-between">
           <div className="flex items-center gap-3">
-            <div className="flex size-10 items-center justify-center rounded-2xl bg-[#ccff00]/15 text-[#ccff00] border border-[#ccff00]/30">
+            <div className="flex size-10 items-center justify-center rounded-2xl bg-theme-accent/15 text-theme-accent border border-theme-accent/30">
               <Dumbbell className="size-5" />
             </div>
             <div>
@@ -109,7 +117,7 @@ export function AddMemberDrawer({ open, onClose, onAddMember }: AddMemberDrawerP
               name="name"
               required
               placeholder="e.g. Shahzaib Khan"
-              className="h-11 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 text-sm font-normal text-white outline-none focus:border-[#ccff00]/60 focus:bg-white/[0.06] transition"
+              className="h-11 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 text-sm font-normal text-white outline-none focus:border-theme-accent/60 focus:bg-white/[0.06] transition"
             />
           </label>
 
@@ -118,7 +126,7 @@ export function AddMemberDrawer({ open, onClose, onAddMember }: AddMemberDrawerP
             Gender
             <select
               name="gender"
-              className="h-11 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 text-sm font-normal text-white outline-none focus:border-[#ccff00]/60 focus:bg-[#111513] transition"
+              className="h-11 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 text-sm font-normal text-white outline-none focus:border-theme-accent/60 focus:bg-[#111513] transition"
             >
               <option className="bg-[#111513]">Male</option>
               <option className="bg-[#111513]">Female</option>
@@ -131,7 +139,7 @@ export function AddMemberDrawer({ open, onClose, onAddMember }: AddMemberDrawerP
             <input
               name="phone"
               placeholder="0300-1234567"
-              className="h-11 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 text-sm font-normal text-white outline-none focus:border-[#ccff00]/60 focus:bg-white/[0.06] transition"
+              className="h-11 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 text-sm font-normal text-white outline-none focus:border-theme-accent/60 focus:bg-white/[0.06] transition"
             />
           </label>
 
@@ -142,7 +150,7 @@ export function AddMemberDrawer({ open, onClose, onAddMember }: AddMemberDrawerP
               name="plan"
               value={selectedPlan}
               onChange={(e) => handlePlanChange(e.target.value as PlanTier)}
-              className="h-11 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 text-sm font-normal text-white outline-none focus:border-[#ccff00]/60 focus:bg-[#111513] transition"
+              className="h-11 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 text-sm font-normal text-white outline-none focus:border-theme-accent/60 focus:bg-[#111513] transition"
             >
               <option value="Standard Gym" className="bg-[#111513]">Standard Gym</option>
               <option value="Treadmill Pro" className="bg-[#111513]">Treadmill Pro</option>
@@ -153,7 +161,7 @@ export function AddMemberDrawer({ open, onClose, onAddMember }: AddMemberDrawerP
           <label className="grid gap-1.5 text-xs font-bold text-white/70">
             Monthly Fee (PKR)
             <div className="relative">
-              <span className="absolute left-3.5 top-1/2 -translate-y-1/2 font-bold text-[#ccff00] text-sm">
+              <span className="absolute left-3.5 top-1/2 -translate-y-1/2 font-bold text-theme-accent text-sm">
                 Rs.
               </span>
               <input
@@ -162,8 +170,8 @@ export function AddMemberDrawer({ open, onClose, onAddMember }: AddMemberDrawerP
                 required
                 value={fee}
                 onChange={(e) => setFee(Number(e.target.value))}
-                placeholder="5000"
-                className="h-11 w-full rounded-xl border border-white/10 bg-white/[0.04] pl-11 pr-3.5 text-sm font-extrabold text-white outline-none focus:border-[#ccff00]/60 focus:bg-white/[0.06] transition"
+                placeholder={String(standardFee)}
+                className="h-11 w-full rounded-xl border border-white/10 bg-white/[0.04] pl-11 pr-3.5 text-sm font-extrabold text-white outline-none focus:border-theme-accent/60 focus:bg-white/[0.06] transition"
               />
             </div>
           </label>
@@ -179,7 +187,7 @@ export function AddMemberDrawer({ open, onClose, onAddMember }: AddMemberDrawerP
             </button>
             <button
               type="submit"
-              className="h-11 flex-1 rounded-xl bg-[#ccff00] text-sm font-black text-black shadow-[0_0_20px_rgba(204,255,0,0.2)] transition hover:bg-[#dcff63] active:scale-95"
+              className="h-11 flex-1 rounded-xl bg-theme-accent text-sm font-black text-theme-btn shadow-[0_0_20px_rgba(var(--brand-accent-rgb),0.2)] transition hover:bg-theme-accent-hover active:scale-95"
             >
               Save Member
             </button>

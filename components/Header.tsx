@@ -39,14 +39,14 @@ export function Header({
         <div className="mx-auto flex h-[70px] max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           {/* Logo & Gym Title */}
           <div className="flex items-center gap-3">
-            <div className="flex size-10 items-center justify-center rounded-xl bg-[#ccff00] text-black shadow-[0_0_25px_rgba(204,255,0,0.25)] transition hover:scale-105">
+            <div className="flex size-10 items-center justify-center rounded-xl bg-theme-accent text-theme-btn shadow-[0_0_25px_rgba(var(--brand-accent-rgb),0.25)] transition hover:scale-105">
               <Dumbbell className="size-5" />
             </div>
             <div>
               <div className="flex items-center gap-2">
                 <p className="text-base font-black tracking-tight text-white sm:text-lg uppercase">{gymName}</p>
-                <span className="hidden rounded-full border border-[#ccff00]/30 bg-[#ccff00]/10 px-2 py-0.5 text-[10px] font-semibold text-[#ccff00] sm:inline-block">
-                  PKR Portal
+                <span className="hidden rounded-full border border-theme-accent/30 bg-theme-accent/10 px-2.5 py-0.5 text-[10px] font-bold text-theme-accent sm:inline-block">
+                  {location}
                 </span>
               </div>
               <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-white/40">Gym Management</p>
@@ -64,7 +64,7 @@ export function Header({
                   onClick={() => setActiveTab(item.id)}
                   className={`flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold transition-all ${
                     isActive
-                      ? 'bg-[#ccff00] text-black shadow-md shadow-[#ccff00]/10'
+                      ? 'bg-theme-accent text-theme-btn shadow-md'
                       : 'text-white/60 hover:text-white hover:bg-white/5'
                   }`}
                 >
@@ -83,7 +83,7 @@ export function Header({
               title="Search athletes or navigate (Ctrl + K)"
               className="flex h-10 items-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-3 text-xs font-semibold text-white/70 transition hover:bg-white/10 hover:text-white"
             >
-              <Search className="size-4 text-[#ccff00]" />
+              <Search className="size-4 text-theme-accent" />
               <span className="hidden lg:inline">Search...</span>
               <kbd className="hidden rounded bg-white/10 px-1.5 py-0.5 text-[10px] font-mono text-white/50 lg:inline">
                 Ctrl K
@@ -98,7 +98,7 @@ export function Header({
             >
               <Bell className="size-4" />
               {unreadCount > 0 && (
-                <span className="absolute -right-1 -top-1 flex size-4 items-center justify-center rounded-full bg-[#ccff00] text-[9px] font-black text-black shadow-[0_0_8px_#ccff00]">
+                <span className="absolute -right-1 -top-1 flex size-4 items-center justify-center rounded-full bg-theme-accent text-[9px] font-black text-theme-btn shadow-[0_0_8px_var(--brand-accent)]">
                   {unreadCount}
                 </span>
               )}
@@ -107,7 +107,7 @@ export function Header({
             {/* Add Member Button */}
             <button
               onClick={onOpenAddMember}
-              className="flex h-10 items-center gap-2 rounded-xl bg-[#ccff00] px-3 text-xs font-bold text-black shadow-[0_0_20px_rgba(204,255,0,0.18)] transition-all hover:bg-[#dcff63] hover:shadow-[0_0_25px_rgba(204,255,0,0.3)] active:scale-95 sm:px-4"
+              className="flex h-10 items-center gap-2 rounded-xl bg-theme-accent px-3 text-xs font-bold text-theme-btn shadow-[0_0_20px_rgba(var(--brand-accent-rgb),0.25)] transition-all hover:bg-theme-accent-hover active:scale-95 sm:px-4"
             >
               <Plus className="size-4 stroke-[3]" />
               <span className="hidden sm:inline">Add Member</span>
@@ -141,19 +141,19 @@ export function Header({
                     }}
                     className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition ${
                       isActive
-                        ? 'bg-[#ccff00]/15 text-[#ccff00] border border-[#ccff00]/30'
+                        ? 'bg-theme-accent/15 text-theme-accent border border-theme-accent/30'
                         : 'text-white/70 hover:bg-white/5 hover:text-white'
                     }`}
                   >
                     <Icon className="size-4" />
                     {item.label}
                   </button>
-                )
+                );
               })}
             </div>
             <div className="mt-4 pt-3 border-t border-white/[0.08] flex items-center justify-between text-xs text-white/40 px-2">
               <span className="flex items-center gap-1.5 text-white/60">
-                <Activity className="size-3.5 text-[#ccff00]" /> Live System Active
+                <Activity className="size-3.5 text-theme-accent" /> Live System Active
               </span>
               <span>{location}</span>
             </div>
@@ -171,10 +171,10 @@ export function Header({
               key={item.id}
               onClick={() => setActiveTab(item.id)}
               className={`flex flex-col items-center justify-center gap-1 py-1 px-3 text-[10px] font-semibold transition ${
-                isActive ? 'text-[#ccff00]' : 'text-white/45 hover:text-white'
+                isActive ? 'text-theme-accent' : 'text-white/45 hover:text-white'
               }`}
             >
-              <Icon className={`size-5 ${isActive ? 'scale-110 text-[#ccff00]' : ''}`} />
+              <Icon className={`size-5 ${isActive ? 'scale-110 text-theme-accent' : ''}`} />
               <span>{item.label.split(' ')[0]}</span>
             </button>
           )

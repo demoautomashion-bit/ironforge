@@ -170,3 +170,52 @@
   }
 }
 
+:root, [data-theme="lime"] {
+  --brand-accent: #ccff00;
+  --brand-accent-hover: #dcff63;
+  --brand-accent-rgb: 204, 255, 0;
+  --brand-accent-text: #000000;
+}
+
+[data-theme="cyan"] {
+  --brand-accent: #00f3ff;
+  --brand-accent-hover: #5ceeff;
+  --brand-accent-rgb: 0, 243, 255;
+  --brand-accent-text: #000000;
+}
+
+[data-theme="orange"] {
+  --brand-accent: #ff6b00;
+  --brand-accent-hover: #ff8533;
+  --brand-accent-rgb: 255, 107, 0;
+  --brand-accent-text: #ffffff;
+}
+
+[data-theme="violet"] {
+  --brand-accent: #a855f7;
+  --brand-accent-hover: #c084fc;
+  --brand-accent-rgb: 168, 85, 247;
+  --brand-accent-text: #ffffff;
+}
+
+.bg-theme-accent {
+  background-color: var(--brand-accent);
+}
+
+.hover\:bg-theme-accent-hover:hover {
+  background-color: var(--brand-accent-hover);
+}
+
+.text-theme-accent {
+  color: var(--brand-accent);
+}
+
+.border-theme-accent {
+  border-color: var(--brand-accent);
+}
+
+.text-theme-btn {
+  color: var(--brand-accent-text);
+}
+
+

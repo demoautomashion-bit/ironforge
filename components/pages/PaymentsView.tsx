@@ -37,7 +37,7 @@ export function PaymentsView({ members, onMarkPaid, onOpenActionSheet }: Payment
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-white/[0.08] pb-5">
         <div>
           <div className="flex items-center gap-2">
-            <CreditCard className="size-5 text-[#ccff00]" />
+            <CreditCard className="size-5 text-theme-accent" />
             <h1 className="text-2xl font-black tracking-tight text-white sm:text-3xl">
               Payments & Dues (PKR)
             </h1>
@@ -51,8 +51,8 @@ export function PaymentsView({ members, onMarkPaid, onOpenActionSheet }: Payment
       {/* 3 Metric Cards for Payments */}
       <div className="grid gap-4 sm:grid-cols-3">
         {/* Active Collections */}
-        <div className="rounded-2xl border border-[#ccff00]/20 bg-[#ccff00]/[0.03] p-5">
-          <div className="flex items-center justify-between text-[#ccff00]">
+        <div className="rounded-2xl border border-theme-accent/20 bg-theme-accent/[0.03] p-5">
+          <div className="flex items-center justify-between text-theme-accent">
             <span className="text-xs font-bold uppercase tracking-wider">Collected Dues</span>
             <CheckCircle2 className="size-5" />
           </div>
@@ -95,7 +95,7 @@ export function PaymentsView({ members, onMarkPaid, onOpenActionSheet }: Payment
             onClick={() => setFilter(tab)}
             className={`rounded-xl px-4 py-2 text-xs font-bold transition-all ${
               filter === tab
-                ? 'bg-[#ccff00] text-black shadow-lg shadow-[#ccff00]/10'
+                ? 'bg-theme-accent text-theme-btn shadow-lg'
                 : 'border border-white/10 bg-white/[0.03] text-white/60 hover:bg-white/10 hover:text-white'
             }`}
           >
@@ -133,13 +133,13 @@ export function PaymentsView({ members, onMarkPaid, onOpenActionSheet }: Payment
                     </div>
                   </td>
                   <td className="px-4 py-4 font-medium text-white/70">{member.plan}</td>
-                  <td className="px-4 py-4 font-black text-[#ccff00]">{formatPKR(member.monthlyFee)}</td>
+                  <td className="px-4 py-4 font-black text-theme-accent">{formatPKR(member.monthlyFee)}</td>
                   <td className="px-4 py-4 text-white/50 text-xs">{member.paymentDate}</td>
                   <td className="px-4 py-4">
                     <span
                       className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-extrabold uppercase ${
                         member.status === 'Active'
-                          ? 'border-[#ccff00]/30 bg-[#ccff00]/10 text-[#ccff00]'
+                          ? 'border-theme-accent/30 bg-theme-accent/10 text-theme-accent'
                           : member.status === 'Due Soon'
                           ? 'border-amber-300/30 bg-amber-300/10 text-amber-300'
                           : 'border-rose-400/30 bg-rose-400/10 text-rose-400'
@@ -157,7 +157,7 @@ export function PaymentsView({ members, onMarkPaid, onOpenActionSheet }: Payment
                         className={`flex h-8 items-center gap-1.5 rounded-lg border px-3 text-xs font-bold transition active:scale-95 ${
                           member.status === 'Active'
                             ? 'border-transparent text-white/30 cursor-default'
-                            : 'border-[#ccff00]/40 bg-[#ccff00]/10 text-[#ccff00] hover:bg-[#ccff00]/20'
+                            : 'border-theme-accent/40 bg-theme-accent/10 text-theme-accent hover:bg-theme-accent/20'
                         }`}
                       >
                         <Check className="size-3.5" />

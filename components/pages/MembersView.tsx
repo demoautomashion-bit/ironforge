@@ -44,7 +44,7 @@ export function MembersView({
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-white/[0.08] pb-5">
         <div>
           <div className="flex items-center gap-2">
-            <Users className="size-5 text-[#ccff00]" />
+            <Users className="size-5 text-theme-accent" />
             <h1 className="text-2xl font-black tracking-tight text-white sm:text-3xl">
               Athlete Roster
             </h1>
@@ -56,7 +56,7 @@ export function MembersView({
 
         <button
           onClick={onOpenAddMember}
-          className="flex h-10 items-center gap-2 rounded-xl bg-[#ccff00] px-4 text-xs font-extrabold text-black shadow-[0_0_20px_rgba(204,255,0,0.2)] transition-all hover:bg-[#dcff63] active:scale-95"
+          className="flex h-10 items-center gap-2 rounded-xl bg-theme-accent px-4 text-xs font-extrabold text-theme-btn shadow-[0_0_20px_rgba(var(--brand-accent-rgb),0.25)] transition-all hover:bg-theme-accent-hover active:scale-95"
         >
           <Plus className="size-4 stroke-[3]" />
           <span>Add New Member</span>

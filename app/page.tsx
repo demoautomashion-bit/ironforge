@@ -48,12 +48,34 @@ export default function Page() {
         if (json.success && json.data) {
           setSettings(json.data)
           if (json.data.themeColor) setThemeColor(json.data.themeColor)
+          try {
+            localStorage.setItem('ironforge_settings', JSON.stringify(json.data))
+          } catch (e) {}
         }
       }
     } catch (e) {
       console.warn('Settings fetch fallback', e)
     }
   }, [])
+
+  // Hydrate settings immediately from local cache on mount to prevent layout flash
+  useEffect(() => {
+    try {
+      const cached = localStorage.getItem('ironforge_settings')
+      if (cached) {
+        const parsed = JSON.parse(cached)
+        if (parsed.gymName) {
+          setSettings(parsed)
+          if (parsed.themeColor) setThemeColor(parsed.themeColor)
+        }
+      }
+    } catch (e) {}
+  }, [])
+
+  // Keep document theme attribute updated
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', themeColor)
+  }, [themeColor])
 
   // Fetch roster from backend API
   const fetchMembers = useCallback(async () => {
@@ -170,10 +192,10 @@ export default function Page() {
   }
 
   return (
-    <main className="min-h-screen bg-[#080a09] text-white pb-20 md:pb-12 font-sans selection:bg-[#ccff00] selection:text-black">
+    <main data-theme={themeColor} className="min-h-screen bg-[#080a09] text-white pb-20 md:pb-12 font-sans selection:bg-theme-accent selection:text-black">
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed top-4 left-1/2 z-50 -translate-x-1/2 rounded-full border border-[#ccff00]/40 bg-[#0d120f] px-5 py-2.5 text-xs font-bold text-[#ccff00] shadow-[0_0_30px_rgba(204,255,0,0.25)] animate-in slide-in-from-top duration-300">
+        <div className="fixed top-4 left-1/2 z-50 -translate-x-1/2 rounded-full border border-theme-accent/40 bg-[#0d120f] px-5 py-2.5 text-xs font-bold text-theme-accent shadow-[0_0_30px_rgba(var(--brand-accent-rgb),0.25)] animate-in slide-in-from-top duration-300">
           ✨ {toastMessage}
         </div>
       )}
@@ -239,6 +261,9 @@ export default function Page() {
             onSettingsSaved={(newSettings) => {
               setSettings(newSettings)
               setThemeColor(newSettings.themeColor)
+              try {
+                localStorage.setItem('ironforge_settings', JSON.stringify(newSettings))
+              } catch (e) {}
             }}
           />
         )}
@@ -249,6 +274,8 @@ export default function Page() {
         open={addModalOpen}
         onClose={() => setAddModalOpen(false)}
         onAddMember={handleAddMember}
+        standardFee={settings.standardFee}
+        treadmillFee={settings.treadmillFee}
       />
 
       {/* Athlete Profile & Action Drawer */}
