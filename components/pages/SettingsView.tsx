@@ -8,12 +8,20 @@ interface SettingsViewProps {
   onShowToast: (msg: string) => void
   currentTheme?: ThemeColor
   onThemeChange?: (theme: ThemeColor) => void
+  onSettingsSaved?: (settings: {
+    gymName: string
+    location: string
+    standardFee: number
+    treadmillFee: number
+    themeColor: ThemeColor
+  }) => void
 }
 
 export function SettingsView({
   onShowToast,
   currentTheme = 'lime',
   onThemeChange,
+  onSettingsSaved,
 }: SettingsViewProps) {
   const [gymName, setGymName] = useState('Iron District PK')
   const [location, setLocation] = useState('Karachi, Pakistan')
@@ -45,7 +53,6 @@ export function SettingsView({
             if (json.data.treadmillFee) setTreadmillFee(json.data.treadmillFee)
             if (json.data.themeColor) {
               setActiveTheme(json.data.themeColor)
-              if (onThemeChange) onThemeChange(json.data.themeColor)
             }
           }
         }
@@ -54,7 +61,7 @@ export function SettingsView({
       }
     }
     loadSettings()
-  }, [onThemeChange])
+  }, [])
 
   function handleThemeSelect(theme: ThemeColor) {
     setActiveTheme(theme)
@@ -65,26 +72,30 @@ export function SettingsView({
   async function handleSave(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
+    const payload = {
+      gymName,
+      location,
+      standardFee,
+      treadmillFee,
+      themeColor: activeTheme,
+    }
     try {
       const res = await fetch('/api/settings', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          gymName,
-          location,
-          standardFee,
-          treadmillFee,
-          themeColor: activeTheme,
-        }),
+        body: JSON.stringify(payload),
       })
       if (res.ok) {
         setSaved(true)
+        if (onSettingsSaved) onSettingsSaved(payload)
         onShowToast('Settings & defaults saved to cloud successfully!')
         setTimeout(() => setSaved(false), 3000)
       } else {
+        if (onSettingsSaved) onSettingsSaved(payload)
         onShowToast('Saved settings locally.')
       }
     } catch (e) {
+      if (onSettingsSaved) onSettingsSaved(payload)
       onShowToast('Saved settings locally.')
     } finally {
       setLoading(false)

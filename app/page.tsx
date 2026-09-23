@@ -235,9 +235,10 @@ export default function Page() {
           <SettingsView
             onShowToast={showToast}
             currentTheme={themeColor}
-            onThemeChange={(t) => {
-              setThemeColor(t)
-              fetchSettings()
+            onThemeChange={(t) => setThemeColor(t)}
+            onSettingsSaved={(newSettings) => {
+              setSettings(newSettings)
+              setThemeColor(newSettings.themeColor)
             }}
           />
         )}
