@@ -1,7 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { Activity, Dumbbell, Menu, Plus, X, Users, CreditCard, LayoutDashboard, Settings, Search, Bell } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { Activity, Dumbbell, Menu, Plus, X, Users, CreditCard, LayoutDashboard, Settings, Search, Bell, LogOut } from 'lucide-react'
 
 interface HeaderProps {
   onOpenAddMember: () => void
@@ -21,10 +22,25 @@ export function Header({
   onOpenCommandPalette,
   onToggleNotifications,
   unreadCount = 0,
-  gymName = 'Iron District PK',
+  gymName = 'Iron Forge',
   location = 'Karachi, PK',
 }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [loggingOut, setLoggingOut] = useState(false)
+  const router = useRouter()
+
+  const handleLogout = async () => {
+    setLoggingOut(true)
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' })
+      router.push('/login')
+      router.refresh()
+    } catch (e) {
+      console.error('Logout error', e)
+    } finally {
+      setLoggingOut(false)
+    }
+  }
 
   const navItems = [
     { id: 'overview', label: 'Overview', icon: LayoutDashboard },
@@ -114,6 +130,16 @@ export function Header({
               <span className="sm:hidden">Add</span>
             </button>
 
+            {/* Logout Button */}
+            <button
+              onClick={handleLogout}
+              disabled={loggingOut}
+              title="Sign Out of Admin Portal"
+              className="flex size-10 items-center justify-center rounded-xl border border-red-500/20 bg-red-500/10 text-red-400 transition hover:bg-red-500/20 hover:text-red-300 disabled:opacity-50"
+            >
+              <LogOut className="size-4" />
+            </button>
+
             {/* Mobile Hamburger Button */}
             <button
               aria-label="Toggle navigation menu"
@@ -124,6 +150,7 @@ export function Header({
             </button>
           </div>
         </div>
+
 
         {/* Mobile Slide-down Drawer */}
         {mobileMenuOpen && (

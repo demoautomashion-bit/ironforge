@@ -3,14 +3,14 @@ import type { Metadata, Viewport } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Iron District | Gym Management',
+  title: 'Iron Forge | Gym Management',
   description: 'A focused dashboard for managing gym members, dues, and payments.',
   generator: 'v0.app',
   manifest: '/manifest.webmanifest',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
-    title: 'Iron District',
+    title: 'Iron Forge',
   },
   icons: {
     icon: [

@@ -19,7 +19,7 @@ import { AuditLogDrawer } from '@/components/AuditLogDrawer'
 export default function Page() {
   const [members, setMembers] = useState<Member[]>([])
   const [settings, setSettings] = useState({
-    gymName: 'Iron District PK',
+    gymName: 'Iron Forge',
     location: 'Karachi, Pakistan',
     standardFee: 5000,
     treadmillFee: 7500,

@@ -5,13 +5,15 @@ export async function POST(request: Request) {
     const body = await request.json()
     const { email, password } = body || {}
 
-    // Simulated secure credential verification
-    if (email === 'admin@irondistrict.pk' && password === 'admin123') {
+    const validEmail = process.env.ADMIN_EMAIL || 'admin@ironforge.pk'
+    const validPassword = process.env.ADMIN_PASSWORD || 'admin_ironforge_2026'
+
+    if (email === validEmail && password === validPassword) {
       const response = NextResponse.json({
         success: true,
         user: {
           name: 'Super Admin',
-          email: 'admin@irondistrict.pk',
+          email: validEmail,
           role: 'SUPER_ADMIN',
         },
       })
@@ -19,12 +21,12 @@ export async function POST(request: Request) {
       // Set HttpOnly, SameSite cookie to defend against XSS & Session Hijacking
       response.cookies.set({
         name: 'iron_session',
-        value: 'session_token_sec_' + Date.now(),
+        value: 'iron_admin_session_valid_' + Date.now(),
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'lax',
         path: '/',
-        maxAge: 60 * 60 * 24, // 24 hours
+        maxAge: 60 * 60 * 24 * 7, // 7 days session
       })
 
       return response
@@ -41,3 +43,4 @@ export async function POST(request: Request) {
     )
   }
 }
+
