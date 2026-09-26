@@ -44,7 +44,7 @@ model Payment {
 
 model Settings {
   id           String   @id @default("default")
-  gymName      String   @default("Iron District PK")
+  gymName      String   @default("Iron Forge")
   location     String   @default("Karachi, Pakistan")
   currency     String   @default("PKR (Rs.)")
   standardFee  Float    @default(5000)

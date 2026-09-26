@@ -18,7 +18,7 @@ export function OverviewView({
   members,
   onNavigateToMembers,
   onOpenAddMember,
-  gymName = 'Iron District PK',
+  gymName = 'Iron Forge',
   standardFee = 5000,
   treadmillFee = 7500,
 }: OverviewViewProps) {

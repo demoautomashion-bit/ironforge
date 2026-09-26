@@ -10,7 +10,7 @@ interface PaymentReceiptModalProps {
   gymName?: string
 }
 
-export function PaymentReceiptModal({ member, onClose, gymName = 'Iron District PK' }: PaymentReceiptModalProps) {
+export function PaymentReceiptModal({ member, onClose, gymName = 'Iron Forge' }: PaymentReceiptModalProps) {
   if (!member) return null
 
   const receiptId = `IDP-${member.id.padStart(5, '0')}`

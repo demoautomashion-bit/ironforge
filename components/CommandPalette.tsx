@@ -168,7 +168,7 @@ export function CommandPalette({
         {/* Footer */}
         <div className="flex items-center justify-between border-t border-white/[0.08] bg-white/[0.02] px-4 py-2 text-[11px] text-white/40">
           <span>Press <kbd className="rounded bg-white/10 px-1.5 py-0.5 text-[10px] font-mono">Esc</kbd> to exit</span>
-          <span className="flex items-center gap-1 text-[#ccff00]"><Dumbbell className="size-3" /> Iron District PK</span>
+          <span className="flex items-center gap-1 text-[#ccff00]"><Dumbbell className="size-3" /> Iron Forge</span>
         </div>
       </div>
     </div>

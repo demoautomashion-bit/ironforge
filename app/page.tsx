@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
+import { Dumbbell } from 'lucide-react'
 import { initialMembers } from '@/lib/mock-data'
 import { Member, ThemeColor } from '@/lib/types'
 import { Header } from '@/components/Header'
@@ -18,6 +19,7 @@ import { AuditLogDrawer } from '@/components/AuditLogDrawer'
 
 export default function Page() {
   const [members, setMembers] = useState<Member[]>([])
+  const [isHydrating, setIsHydrating] = useState(true)
   const [settings, setSettings] = useState({
     gymName: 'Iron Forge',
     location: 'Karachi, Pakistan',
@@ -48,10 +50,14 @@ export default function Page() {
       if (res.ok) {
         const json = await res.json()
         if (json.success && json.data) {
-          setSettings(json.data)
-          if (json.data.themeColor) setThemeColor(json.data.themeColor)
+          const freshSettings = {
+            ...json.data,
+            gymName: json.data.gymName?.includes('Iron District') ? 'Iron Forge' : json.data.gymName || 'Iron Forge'
+          }
+          setSettings(freshSettings)
+          if (freshSettings.themeColor) setThemeColor(freshSettings.themeColor)
           try {
-            localStorage.setItem('ironforge_settings', JSON.stringify(json.data))
+            localStorage.setItem('ironforge_settings', JSON.stringify(freshSettings))
           } catch (e) {}
         }
       }
@@ -66,9 +72,12 @@ export default function Page() {
       const cached = localStorage.getItem('ironforge_settings')
       if (cached) {
         const parsed = JSON.parse(cached)
-        if (parsed.gymName) {
+        if (parsed.gymName && !parsed.gymName.includes('Iron District')) {
           setSettings(parsed)
           if (parsed.themeColor) setThemeColor(parsed.themeColor)
+        } else {
+          // Purge stale legacy keys
+          localStorage.removeItem('ironforge_settings')
         }
       }
     } catch (e) {}
@@ -95,8 +104,11 @@ export default function Page() {
   }, [])
 
   useEffect(() => {
-    fetchSettings()
-    fetchMembers()
+    async function initData() {
+      await Promise.all([fetchSettings(), fetchMembers()])
+      setIsHydrating(false)
+    }
+    initData()
   }, [fetchSettings, fetchMembers])
 
   // Execute ACID payment transaction via API
@@ -193,8 +205,28 @@ export default function Page() {
     showToast(`Removed ${target?.name || 'member'} from roster.`)
   }
 
+  if (isHydrating) {
+    return (
+      <main data-theme={themeColor} className="min-h-screen bg-[#080a09] text-white flex flex-col items-center justify-center p-4 font-sans relative overflow-hidden">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-theme-accent/10 rounded-full blur-[120px] pointer-events-none" />
+        <div className="relative z-10 flex flex-col items-center text-center gap-4">
+          <div className="size-16 rounded-2xl bg-theme-accent/15 border border-theme-accent/40 flex items-center justify-center text-theme-accent shadow-[0_0_40px_rgba(var(--brand-accent-rgb),0.2)] animate-pulse">
+            <Dumbbell className="size-8 animate-bounce" />
+          </div>
+          <div>
+            <h1 className="text-xl font-black tracking-wider uppercase text-white">IRON FORGE</h1>
+            <p className="text-xs text-white/40 mt-1 font-mono tracking-widest">LOADING PORTAL DATA...</p>
+          </div>
+          <div className="w-32 h-1 bg-white/10 rounded-full overflow-hidden mt-2">
+            <div className="h-full bg-theme-accent animate-pulse w-full" />
+          </div>
+        </div>
+      </main>
+    )
+  }
+
   return (
-    <main data-theme={themeColor} className="min-h-screen bg-[#080a09] text-white pb-20 md:pb-12 font-sans selection:bg-theme-accent selection:text-black">
+    <main data-theme={themeColor} className="min-h-screen bg-[#080a09] text-white pb-20 md:pb-12 font-sans selection:bg-theme-accent selection:text-black animate-in fade-in duration-300">
       {/* Toast Notification */}
       {toastMessage && (
         <div className="fixed top-4 left-1/2 z-50 -translate-x-1/2 rounded-full border border-theme-accent/40 bg-[#0d120f] px-5 py-2.5 text-xs font-bold text-theme-accent shadow-[0_0_30px_rgba(var(--brand-accent-rgb),0.25)] animate-in slide-in-from-top duration-300">

@@ -2,8 +2,8 @@ import type { MetadataRoute } from 'next'
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Iron District | Gym Management',
-    short_name: 'Iron District',
+    name: 'Iron Forge | Gym Management',
+    short_name: 'Iron Forge',
     description: 'A focused dashboard for managing gym members, dues, and payments.',
     start_url: '/',
     display: 'standalone',

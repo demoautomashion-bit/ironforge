@@ -14,7 +14,7 @@ export function DeleteConfirmModal({
   member,
   onClose,
   onConfirmDelete,
-  gymName = 'Iron District PK',
+  gymName = 'Iron Forge',
 }: DeleteConfirmModalProps) {
   if (!member) return null
 

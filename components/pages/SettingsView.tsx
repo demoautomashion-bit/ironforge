@@ -28,7 +28,7 @@ export function SettingsView({
   onOpenAuditLogs,
   onSettingsSaved,
 }: SettingsViewProps) {
-  const [gymName, setGymName] = useState('Iron District PK')
+  const [gymName, setGymName] = useState('Iron Forge')
   const [location, setLocation] = useState('Karachi, Pakistan')
   const [currency] = useState('PKR (Rs.)')
   const [standardFee, setStandardFee] = useState(5000)

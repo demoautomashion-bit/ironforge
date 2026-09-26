@@ -305,7 +305,7 @@ class NeonGymDatabase {
         const created = await prisma.settings.create({
           data: {
             id: 'default',
-            gymName: 'Iron District PK',
+            gymName: 'Iron Forge',
             location: 'Karachi, Pakistan',
             currency: 'PKR (Rs.)',
             standardFee: 5000,
@@ -340,7 +340,7 @@ class NeonGymDatabase {
       }
     } catch (e) {
       return {
-        gymName: 'Iron District PK',
+        gymName: 'Iron Forge',
         location: 'Karachi, Pakistan',
         currency: 'PKR (Rs.)',
         standardFee: 5000,
@@ -368,7 +368,7 @@ class NeonGymDatabase {
         },
         create: {
           id: 'default',
-          gymName: updates.gymName || 'Iron District PK',
+          gymName: updates.gymName || 'Iron Forge',
           location: updates.location || 'Karachi, Pakistan',
           currency: updates.currency || 'PKR (Rs.)',
           standardFee: updates.standardFee || 5000,
