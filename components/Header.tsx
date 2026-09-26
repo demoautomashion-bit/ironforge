@@ -130,16 +130,6 @@ export function Header({
               <span className="sm:hidden">Add</span>
             </button>
 
-            {/* Logout Button */}
-            <button
-              onClick={handleLogout}
-              disabled={loggingOut}
-              title="Sign Out of Admin Portal"
-              className="flex size-10 items-center justify-center rounded-xl border border-red-500/20 bg-red-500/10 text-red-400 transition hover:bg-red-500/20 hover:text-red-300 disabled:opacity-50"
-            >
-              <LogOut className="size-4" />
-            </button>
-
             {/* Mobile Hamburger Button */}
             <button
               aria-label="Toggle navigation menu"
@@ -177,6 +167,19 @@ export function Header({
                   </button>
                 );
               })}
+
+              {/* Logout Option in Burger Menu (Below Settings) */}
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false)
+                  handleLogout()
+                }}
+                disabled={loggingOut}
+                className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold text-rose-400 bg-rose-500/10 border border-rose-500/20 hover:bg-rose-500/20 transition mt-2 disabled:opacity-50"
+              >
+                <LogOut className="size-4" />
+                <span>Sign Out (Logout)</span>
+              </button>
             </div>
             <div className="mt-4 pt-3 border-t border-white/[0.08] flex items-center justify-between text-xs text-white/40 px-2">
               <span className="flex items-center gap-1.5 text-white/60">

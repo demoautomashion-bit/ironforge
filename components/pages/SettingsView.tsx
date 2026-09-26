@@ -40,6 +40,15 @@ export function SettingsView({
   const [saved, setSaved] = useState(false)
   const [loading, setLoading] = useState(false)
 
+  // Admin Credential Form State
+  const [adminEmail, setAdminEmail] = useState('admin@ironforge.pk')
+  const [currentPassword, setCurrentPassword] = useState('')
+  const [newPassword, setNewPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [credLoading, setCredLoading] = useState(false)
+  const [credError, setCredError] = useState<string | null>(null)
+  const [credSuccess, setCredSuccess] = useState<string | null>(null)
+
   const themeOptions: { id: ThemeColor; name: string; hex: string; bgClass: string }[] = [
     { id: 'lime', name: 'Cyber Lime', hex: '#ccff00', bgClass: 'bg-[#ccff00]' },
     { id: 'cyan', name: 'Electric Cyan', hex: '#00f3ff', bgClass: 'bg-[#00f3ff]' },
@@ -62,6 +71,7 @@ export function SettingsView({
             if (json.data.morningShift) setMorningShift(json.data.morningShift)
             if (json.data.ladiesShift) setLadiesShift(json.data.ladiesShift)
             if (json.data.eveningShift) setEveningShift(json.data.eveningShift)
+            if (json.data.adminEmail) setAdminEmail(json.data.adminEmail)
             if (json.data.themeColor) {
               setActiveTheme(json.data.themeColor)
             }
@@ -73,6 +83,51 @@ export function SettingsView({
     }
     loadSettings()
   }, [])
+
+  async function handleUpdateCredentials() {
+    setCredError(null)
+    setCredSuccess(null)
+
+    if (!currentPassword) {
+      setCredError('Please enter your current password to authorize updates.')
+      return
+    }
+
+    if (newPassword && newPassword !== confirmPassword) {
+      setCredError('New password and confirmation do not match.')
+      return
+    }
+
+    setCredLoading(true)
+
+    try {
+      const res = await fetch('/api/auth/credentials', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          currentPassword,
+          newEmail: adminEmail,
+          newPassword: newPassword || currentPassword,
+        }),
+      })
+
+      const data = await res.json()
+
+      if (res.ok && data.success) {
+        setCredSuccess('Admin credentials updated successfully! Use new details on next login.')
+        setCurrentPassword('')
+        setNewPassword('')
+        setConfirmPassword('')
+        onShowToast('Admin credentials updated successfully!')
+      } else {
+        setCredError(data.message || 'Failed to update credentials.')
+      }
+    } catch (err) {
+      setCredError('Network error occurred. Please try again.')
+    } finally {
+      setCredLoading(false)
+    }
+  }
 
   function handleThemeSelect(theme: ThemeColor) {
     setActiveTheme(theme)
@@ -296,6 +351,97 @@ export function SettingsView({
               />
               <span className="text-[10px] font-normal text-white/40">Open for all athletes</span>
             </label>
+          </div>
+        </div>
+
+        {/* Admin Account & Security Settings */}
+        <div className="rounded-2xl border border-white/[0.08] bg-[#0d100f] p-6 space-y-4">
+          <div className="flex items-center gap-3 pb-3 border-b border-white/[0.06]">
+            <div className="flex size-9 items-center justify-center rounded-xl bg-red-400/10 text-red-400 border border-red-400/20">
+              <Shield className="size-4" />
+            </div>
+            <div>
+              <h2 className="text-base font-extrabold text-white">Admin Account Security</h2>
+              <p className="text-xs text-white/40">Update login email and administrator password</p>
+            </div>
+          </div>
+
+          {credError && (
+            <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-semibold">
+              ⚠️ {credError}
+            </div>
+          )}
+
+          {credSuccess && (
+            <div className="p-3 rounded-xl bg-theme-accent/10 border border-theme-accent/30 text-theme-accent text-xs font-semibold">
+              ✓ {credSuccess}
+            </div>
+          )}
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <label className="grid gap-1.5 text-xs font-bold text-white/70">
+              Admin Login Email
+              <input
+                type="email"
+                required
+                value={adminEmail}
+                onChange={(e) => setAdminEmail(e.target.value)}
+                placeholder="admin@ironforge.pk"
+                className="h-11 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 text-xs font-semibold text-white outline-none focus:border-theme-accent/60 transition"
+              />
+            </label>
+
+            <label className="grid gap-1.5 text-xs font-bold text-white/70">
+              Current Password (Required to verify)
+              <input
+                type="password"
+                required
+                value={currentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
+                placeholder="Enter current password"
+                className="h-11 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 text-xs font-semibold text-white outline-none focus:border-theme-accent/60 transition"
+              />
+            </label>
+
+            <label className="grid gap-1.5 text-xs font-bold text-white/70">
+              New Password
+              <input
+                type="password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                placeholder="Leave blank to keep unchanged"
+                className="h-11 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 text-xs font-semibold text-white outline-none focus:border-theme-accent/60 transition"
+              />
+            </label>
+
+            <label className="grid gap-1.5 text-xs font-bold text-white/70">
+              Confirm New Password
+              <input
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Repeat new password"
+                className="h-11 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 text-xs font-semibold text-white outline-none focus:border-theme-accent/60 transition"
+              />
+            </label>
+          </div>
+
+          <div className="pt-2 flex justify-end">
+            <button
+              type="button"
+              onClick={handleUpdateCredentials}
+              disabled={credLoading}
+              className="flex h-10 items-center gap-2 rounded-xl bg-red-500/20 border border-red-500/40 px-4 text-xs font-bold text-red-300 transition hover:bg-red-500/30 active:scale-95 disabled:opacity-50 cursor-pointer"
+            >
+              {credLoading ? (
+                <span>Updating Credentials...</span>
+              ) : (
+                <>
+                  <Shield className="size-3.5" />
+                  <span>Update Admin Login Credentials</span>
+                </>
+              )}
+            </button>
           </div>
         </div>
 

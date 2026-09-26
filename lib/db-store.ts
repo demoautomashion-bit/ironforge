@@ -25,6 +25,8 @@ export interface DBSettings {
   standardFee: number
   treadmillFee: number
   themeColor: ThemeColor
+  adminEmail?: string
+  adminPassword?: string
   morningShift?: string
   ladiesShift?: string
   eveningShift?: string
@@ -320,6 +322,8 @@ class NeonGymDatabase {
           standardFee: created.standardFee,
           treadmillFee: created.treadmillFee,
           themeColor: created.themeColor as any,
+          adminEmail: (created as any).adminEmail || 'admin@ironforge.pk',
+          adminPassword: (created as any).adminPassword || 'admin_ironforge_2026',
           morningShift: '06:00 AM – 11:30 AM',
           ladiesShift: '12:00 PM – 04:00 PM',
           eveningShift: '04:30 PM – 11:00 PM',
@@ -333,6 +337,8 @@ class NeonGymDatabase {
         standardFee: s.standardFee,
         treadmillFee: s.treadmillFee,
         themeColor: s.themeColor as any,
+        adminEmail: (s as any).adminEmail || 'admin@ironforge.pk',
+        adminPassword: (s as any).adminPassword || 'admin_ironforge_2026',
         morningShift: (s as any).morningShift || '06:00 AM – 11:30 AM',
         ladiesShift: (s as any).ladiesShift || '12:00 PM – 04:00 PM',
         eveningShift: (s as any).eveningShift || '04:30 PM – 11:00 PM',
@@ -346,6 +352,8 @@ class NeonGymDatabase {
         standardFee: 5000,
         treadmillFee: 7500,
         themeColor: 'lime',
+        adminEmail: 'admin@ironforge.pk',
+        adminPassword: 'admin_ironforge_2026',
         morningShift: '06:00 AM – 11:30 AM',
         ladiesShift: '12:00 PM – 04:00 PM',
         eveningShift: '04:30 PM – 11:00 PM',
@@ -365,6 +373,8 @@ class NeonGymDatabase {
           ...(updates.standardFee && { standardFee: updates.standardFee }),
           ...(updates.treadmillFee && { treadmillFee: updates.treadmillFee }),
           ...(updates.themeColor && { themeColor: updates.themeColor }),
+          ...(updates.adminEmail && { adminEmail: updates.adminEmail }),
+          ...(updates.adminPassword && { adminPassword: updates.adminPassword }),
         },
         create: {
           id: 'default',
@@ -374,6 +384,8 @@ class NeonGymDatabase {
           standardFee: updates.standardFee || 5000,
           treadmillFee: updates.treadmillFee || 7500,
           themeColor: updates.themeColor || 'lime',
+          adminEmail: updates.adminEmail || 'admin@ironforge.pk',
+          adminPassword: updates.adminPassword || 'admin_ironforge_2026',
         },
       })
       await this.logAudit('SETTINGS_UPDATED', 'Updated persistent gym configuration in Neon PostgreSQL.')
@@ -384,6 +396,8 @@ class NeonGymDatabase {
         standardFee: updated.standardFee,
         treadmillFee: updated.treadmillFee,
         themeColor: updated.themeColor as any,
+        adminEmail: (updated as any).adminEmail || 'admin@ironforge.pk',
+        adminPassword: (updated as any).adminPassword || 'admin_ironforge_2026',
         morningShift: updates.morningShift || '06:00 AM – 11:30 AM',
         ladiesShift: updates.ladiesShift || '12:00 PM – 04:00 PM',
         eveningShift: updates.eveningShift || '04:30 PM – 11:00 PM',

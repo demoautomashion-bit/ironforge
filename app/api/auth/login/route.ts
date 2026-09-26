@@ -1,12 +1,15 @@
 import { NextResponse } from 'next/server'
+import { gymDB } from '@/lib/db-store'
 
 export async function POST(request: Request) {
   try {
     const body = await request.json()
     const { email, password } = body || {}
 
-    const validEmail = process.env.ADMIN_EMAIL || 'admin@ironforge.pk'
-    const validPassword = process.env.ADMIN_PASSWORD || 'admin_ironforge_2026'
+    const settings = await gymDB.getSettings()
+
+    const validEmail = settings.adminEmail || process.env.ADMIN_EMAIL || 'admin@ironforge.pk'
+    const validPassword = settings.adminPassword || process.env.ADMIN_PASSWORD || 'admin_ironforge_2026'
 
     if (email === validEmail && password === validPassword) {
       const response = NextResponse.json({

@@ -50,6 +50,8 @@ model Settings {
   standardFee  Float    @default(5000)
   treadmillFee Float    @default(7500)
   themeColor   String   @default("lime")
+  adminEmail   String?  @default("admin@ironforge.pk")
+  adminPassword String? @default("admin_ironforge_2026")
   updatedAt    DateTime @updatedAt
 }
 
