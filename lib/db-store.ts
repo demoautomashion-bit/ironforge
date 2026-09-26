@@ -92,6 +92,7 @@ class NeonGymDatabase {
         paymentDate: m.paymentDate,
         status: computedStatus,
         color: m.color as any,
+        photoUrl: m.photoUrl || undefined,
       }
     })
   }
@@ -115,6 +116,7 @@ class NeonGymDatabase {
       paymentDate: m.paymentDate,
       status: computedStatus,
       color: m.color as any,
+      photoUrl: m.photoUrl || undefined,
     }
   }
 
@@ -132,6 +134,7 @@ class NeonGymDatabase {
         paymentDate: newMember.paymentDate,
         status: newMember.status,
         color: newMember.color,
+        photoUrl: newMember.photoUrl || null,
       },
     })
 
@@ -149,6 +152,7 @@ class NeonGymDatabase {
       paymentDate: created.paymentDate,
       status: created.status as any,
       color: created.color as any,
+      photoUrl: created.photoUrl || undefined,
     }
   }
 
@@ -165,6 +169,7 @@ class NeonGymDatabase {
           ...(updates.monthlyFee && { monthlyFee: updates.monthlyFee }),
           ...(updates.status && { status: updates.status }),
           ...(updates.paymentDate && { paymentDate: updates.paymentDate }),
+          ...(updates.photoUrl !== undefined && { photoUrl: updates.photoUrl || null }),
         },
       })
       await this.logAudit('MEMBER_UPDATED', `Updated athlete record ${updated.name} in Neon PostgreSQL.`)
@@ -180,6 +185,7 @@ class NeonGymDatabase {
         paymentDate: updated.paymentDate,
         status: updated.status as any,
         color: updated.color as any,
+        photoUrl: updated.photoUrl || undefined,
       }
     } catch (e) {
       return undefined

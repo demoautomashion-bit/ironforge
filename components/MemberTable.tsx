@@ -32,8 +32,12 @@ export function MemberTable({ members, onMarkPaid, onOpenActionSheet, onOpenDele
               <tr key={member.id} className="group transition-colors duration-200 hover:bg-white/[0.03]">
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-3">
-                    <div className={`flex size-10 items-center justify-center rounded-2xl text-xs font-black transition-transform duration-200 group-hover:scale-105 ${avatarColors[member.color]}`}>
-                      {member.initials}
+                    <div className={`flex size-10 items-center justify-center rounded-2xl text-xs font-black transition-transform duration-200 group-hover:scale-105 overflow-hidden ${member.photoUrl ? 'border border-white/20 bg-black' : avatarColors[member.color]}`}>
+                      {member.photoUrl ? (
+                        <img src={member.photoUrl} alt={member.name} className="size-full object-cover" />
+                      ) : (
+                        member.initials
+                      )}
                     </div>
                     <div>
                       <p className="font-extrabold text-white">{member.name}</p>

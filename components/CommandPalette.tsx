@@ -135,8 +135,12 @@ export function CommandPalette({
                   className="flex w-full items-center justify-between rounded-xl p-3 text-left transition hover:bg-white/[0.05]"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="flex size-8 items-center justify-center rounded-lg bg-[#ccff00]/10 text-[#ccff00] text-xs font-bold">
-                      {m.initials}
+                    <div className="flex size-8 items-center justify-center rounded-lg bg-[#ccff00]/10 text-[#ccff00] text-xs font-bold overflow-hidden">
+                      {m.photoUrl ? (
+                        <img src={m.photoUrl} alt={m.name} className="size-full object-cover" />
+                      ) : (
+                        m.initials
+                      )}
                     </div>
                     <div>
                       <p className="text-sm font-bold text-white">{m.name}</p>

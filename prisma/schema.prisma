@@ -22,6 +22,7 @@ model Member {
   paymentDate String
   status      String    // "Active" | "Due Soon" | "Overdue"
   color       String    @default("lime")
+  photoUrl    String?
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt

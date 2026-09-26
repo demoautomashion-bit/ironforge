@@ -15,6 +15,7 @@ export interface Member {
   paymentDate: string
   status: Status
   color: 'lime' | 'blue' | 'violet' | 'orange' | 'pink' | 'cyan'
+  photoUrl?: string
 }
 
 export interface MetricData {

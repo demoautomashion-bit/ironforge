@@ -1,8 +1,9 @@
 'use client'
 
-import { FormEvent, useState } from 'react'
-import { X, Dumbbell } from 'lucide-react'
+import { FormEvent, useState, useRef } from 'react'
+import { X, Dumbbell, Camera, Upload, Trash2, User } from 'lucide-react'
 import { Gender, Member, PlanTier } from '@/lib/types'
+import { compressImageToWebP } from '@/lib/image-utils'
 
 interface AddMemberDrawerProps {
   open: boolean
@@ -21,6 +22,9 @@ export function AddMemberDrawer({
 }: AddMemberDrawerProps) {
   const [selectedPlan, setSelectedPlan] = useState<PlanTier>('Standard Gym')
   const [fee, setFee] = useState<number>(standardFee)
+  const [photoUrl, setPhotoUrl] = useState<string | null>(null)
+  const [compressing, setCompressing] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   if (!open) return null
 
@@ -30,6 +34,21 @@ export function AddMemberDrawer({
       setFee(standardFee)
     } else {
       setFee(treadmillFee)
+    }
+  }
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    try {
+      setCompressing(true)
+      const webpDataUrl = await compressImageToWebP(file, 250, 0.8)
+      setPhotoUrl(webpDataUrl)
+    } catch (err) {
+      console.error('Image compression failed', err)
+    } finally {
+      setCompressing(false)
     }
   }
 
@@ -71,8 +90,11 @@ export function AddMemberDrawer({
       paymentDate: todayStr,
       status: 'Active',
       color: randomColor,
+      photoUrl: photoUrl || undefined,
     })
 
+    // Reset photo state
+    setPhotoUrl(null)
     onClose()
   }
 
@@ -84,7 +106,7 @@ export function AddMemberDrawer({
       className="fixed inset-0 z-50 flex items-end justify-center bg-black/80 backdrop-blur-md transition-all sm:items-center p-0 sm:p-4 animate-in fade-in duration-300 ease-out"
     >
       {/* Container: Bottom Sheet on Mobile, Centered Modal on Desktop */}
-      <div className="w-full max-w-lg rounded-t-3xl border-t border-white/15 bg-[#111513] p-6 shadow-2xl sm:rounded-3xl sm:border border-white/10 animate-in slide-in-from-bottom duration-300 ease-out will-change-transform">
+      <div className="w-full max-w-lg rounded-t-3xl border-t border-white/15 bg-[#111513] p-6 shadow-2xl sm:rounded-3xl sm:border border-white/10 animate-in slide-in-from-bottom duration-300 ease-out will-change-transform max-h-[90vh] overflow-y-auto">
         {/* Top Handle bar for mobile drag feeling */}
         <div className="mx-auto mb-4 h-1.5 w-12 rounded-full bg-white/20 sm:hidden" />
 
@@ -110,6 +132,72 @@ export function AddMemberDrawer({
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="grid gap-4 sm:grid-cols-2">
+          {/* Member Photo Avatar Picker */}
+          <div className="sm:col-span-2 flex flex-col items-center justify-center p-4 rounded-2xl border border-dashed border-white/15 bg-white/[0.02]">
+            <input
+              type="file"
+              ref={fileInputRef}
+              accept="image/*"
+              onChange={handleFileChange}
+              className="hidden"
+            />
+            
+            <div className="relative group">
+              <div 
+                onClick={() => fileInputRef.current?.click()}
+                className="size-20 rounded-full border-2 border-theme-accent/40 bg-white/5 flex items-center justify-center overflow-hidden cursor-pointer hover:border-theme-accent transition shadow-lg relative"
+              >
+                {photoUrl ? (
+                  <img src={photoUrl} alt="Preview" className="w-full h-full object-cover" />
+                ) : (
+                  <div className="flex flex-col items-center justify-center text-white/40 group-hover:text-theme-accent transition">
+                    <User className="size-8" />
+                  </div>
+                )}
+                
+                {compressing && (
+                  <div className="absolute inset-0 bg-black/70 flex items-center justify-center">
+                    <div className="size-5 border-2 border-theme-accent border-t-transparent rounded-full animate-spin" />
+                  </div>
+                )}
+              </div>
+
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                className="absolute bottom-0 right-0 size-7 rounded-full bg-theme-accent text-theme-btn flex items-center justify-center shadow-md hover:scale-110 transition cursor-pointer"
+                title="Upload Photo"
+              >
+                <Camera className="size-4" />
+              </button>
+            </div>
+
+            <div className="mt-2 text-center">
+              <div className="flex items-center justify-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="text-xs font-bold text-theme-accent hover:underline flex items-center gap-1 cursor-pointer"
+                >
+                  <Upload className="size-3" />
+                  <span>{photoUrl ? 'Change Photo' : 'Upload Member Photo'}</span>
+                </button>
+
+                {photoUrl && (
+                  <button
+                    type="button"
+                    onClick={() => setPhotoUrl(null)}
+                    className="text-xs font-bold text-red-400 hover:underline flex items-center gap-1 cursor-pointer"
+                  >
+                    <Trash2 className="size-3" />
+                    <span>Remove</span>
+                  </button>
+                )}
+              </div>
+              <p className="text-[10px] text-white/40 mt-1">Auto-compressed WebP avatar (~15 KB)</p>
+            </div>
+          </div>
+
           {/* Full Name */}
           <label className="grid gap-1.5 text-xs font-bold text-white/70 sm:col-span-2">
             Full Name *

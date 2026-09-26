@@ -31,8 +31,12 @@ export function MemberCardList({ members, onMarkPaid, onOpenActionSheet, onOpenD
           {/* Top Row: Avatar, Name, Plan, and Status Badge */}
           <div className="flex items-start justify-between gap-3">
             <div className="flex items-center gap-3">
-              <div className={`flex size-11 items-center justify-center rounded-2xl text-xs font-black shadow-inner transition-transform duration-200 group-hover:scale-105 ${avatarColors[member.color]}`}>
-                {member.initials}
+              <div className={`flex size-11 items-center justify-center rounded-2xl text-xs font-black shadow-inner transition-transform duration-200 group-hover:scale-105 overflow-hidden ${member.photoUrl ? 'border border-white/20 bg-black' : avatarColors[member.color]}`}>
+                {member.photoUrl ? (
+                  <img src={member.photoUrl} alt={member.name} className="size-full object-cover" />
+                ) : (
+                  member.initials
+                )}
               </div>
               <div>
                 <h3 className="text-base font-extrabold text-white">{member.name}</h3>

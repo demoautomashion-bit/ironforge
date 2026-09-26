@@ -44,8 +44,12 @@ export function AthleteProfileDrawer({
         {/* Top Header */}
         <div className="mb-6 flex items-start justify-between border-b border-white/[0.08] pb-4">
           <div className="flex items-center gap-3.5">
-            <div className={`flex size-14 items-center justify-center rounded-2xl text-base font-black shadow-lg ${avatarColors[member.color]}`}>
-              {member.initials}
+            <div className={`flex size-14 items-center justify-center rounded-2xl text-base font-black shadow-lg overflow-hidden ${member.photoUrl ? 'border border-white/20 bg-black' : avatarColors[member.color]}`}>
+              {member.photoUrl ? (
+                <img src={member.photoUrl} alt={member.name} className="size-full object-cover" />
+              ) : (
+                member.initials
+              )}
             </div>
             <div>
               <div className="flex items-center gap-2">
