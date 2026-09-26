@@ -33,8 +33,12 @@ export function MemberActionSheet({
         {/* Top Header */}
         <div className="mb-5 flex items-start justify-between">
           <div className="flex items-center gap-3">
-            <div className={`flex size-12 items-center justify-center rounded-2xl text-sm font-black ${avatarColors[member.color]}`}>
-              {member.initials}
+            <div className={`flex size-12 items-center justify-center rounded-2xl text-sm font-black overflow-hidden ${member.photoUrl ? 'border border-white/20 bg-black' : avatarColors[member.color]}`}>
+              {member.photoUrl ? (
+                <img src={member.photoUrl} alt={member.name} className="size-full object-cover" />
+              ) : (
+                member.initials
+              )}
             </div>
             <div>
               <h3 className="text-lg font-black text-white">{member.name}</h3>

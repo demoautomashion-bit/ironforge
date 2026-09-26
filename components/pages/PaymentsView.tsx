@@ -123,8 +123,12 @@ export function PaymentsView({ members, onMarkPaid, onOpenActionSheet }: Payment
                 <tr key={member.id} className="group transition hover:bg-white/[0.03]">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
-                      <div className={`flex size-9 items-center justify-center rounded-xl text-xs font-black ${avatarColors[member.color]}`}>
-                        {member.initials}
+                      <div className={`flex size-9 items-center justify-center rounded-xl text-xs font-black overflow-hidden ${member.photoUrl ? 'border border-white/20 bg-black' : avatarColors[member.color]}`}>
+                        {member.photoUrl ? (
+                          <img src={member.photoUrl} alt={member.name} className="size-full object-cover" />
+                        ) : (
+                          member.initials
+                        )}
                       </div>
                       <div>
                         <p className="font-extrabold text-white">{member.name}</p>
