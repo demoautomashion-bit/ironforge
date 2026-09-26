@@ -22,6 +22,7 @@ export default function LoginPage() {
           const json = await res.json()
           if (json.success && json.data?.themeColor) {
             setThemeColor(json.data.themeColor)
+            document.documentElement.setAttribute('data-theme', json.data.themeColor)
           }
         }
       } catch (e) {}
@@ -77,7 +78,15 @@ export default function LoginPage() {
             <div className="relative group cursor-pointer mb-4">
               {/* Logo Outer Glow Container */}
               <div className="w-24 h-24 rounded-2xl border-2 border-theme-accent/60 bg-black flex items-center justify-center overflow-hidden transition-all duration-300 group-hover:border-theme-accent group-hover:scale-105 shadow-[0_0_30px_rgba(var(--brand-accent-rgb),0.25)]">
-                <img src="/ironforge.jpeg" alt="Iron Forge Logo" className="w-full h-full object-cover" />
+                <img 
+                  src="/ironforge.jpeg" 
+                  alt="Iron Forge Logo" 
+                  className="size-full object-contain p-2 transition-transform duration-300 group-hover:scale-110" 
+                  onError={(e) => {
+                    // Fallback to stylized SVG dumbbell icon if image fails
+                    e.currentTarget.style.display = 'none'
+                  }}
+                />
               </div>
             </div>
 

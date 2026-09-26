@@ -172,7 +172,7 @@ export function SettingsView({
   }
 
   return (
-    <div className="max-w-4xl space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-300 ease-out">
+    <div className="max-w-7xl space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-300 ease-out">
       {/* Header */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-white/[0.08] pb-5">
         <div>
@@ -189,301 +189,310 @@ export function SettingsView({
       </div>
 
       <form onSubmit={handleSave} className="space-y-6">
-        {/* Live Theme Accent Customizer */}
-        <div className="rounded-2xl border border-white/[0.08] bg-[#0d100f] p-6 space-y-4">
-          <div className="flex items-center gap-3 pb-3 border-b border-white/[0.06]">
-            <div className="flex size-9 items-center justify-center rounded-xl bg-theme-accent/10 text-theme-accent border border-theme-accent/20">
-              <Palette className="size-4" />
-            </div>
-            <div>
-              <h2 className="text-base font-extrabold text-white">Live Theme Accent Customizer</h2>
-              <p className="text-xs text-white/40">Select your preferred portal accent color theme</p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-            {themeOptions.map((t) => (
-              <button
-                key={t.id}
-                type="button"
-                onClick={() => handleThemeSelect(t.id)}
-                className={`flex items-center gap-3 rounded-xl border p-3 text-left transition ${
-                  activeTheme === t.id
-                    ? 'border-theme-accent bg-white/[0.06] shadow-[0_0_15px_rgba(var(--brand-accent-rgb),0.25)]'
-                    : 'border-white/10 bg-white/[0.02] hover:bg-white/[0.05]'
-                }`}
-              >
-                <span className={`size-5 rounded-full ${t.bgClass} shadow-md`} />
-                <div>
-                  <p className="text-xs font-bold text-white">{t.name}</p>
-                  <p className="text-[10px] text-white/40">{t.hex}</p>
+        {/* Responsive Desktop 2-Column Grid */}
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 items-start">
+          {/* Left Column: Gym Identity, Pricing, Shifts */}
+          <div className="space-y-6">
+            {/* Gym Identity Settings */}
+            <div className="rounded-2xl border border-white/[0.08] bg-[#0d100f] p-6 space-y-4">
+              <div className="flex items-center gap-3 pb-3 border-b border-white/[0.06]">
+                <div className="flex size-9 items-center justify-center rounded-xl bg-sky-400/10 text-sky-400 border border-sky-400/20">
+                  <Dumbbell className="size-4" />
                 </div>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Gym Identity Settings */}
-        <div className="rounded-2xl border border-white/[0.08] bg-[#0d100f] p-6 space-y-4">
-          <div className="flex items-center gap-3 pb-3 border-b border-white/[0.06]">
-            <div className="flex size-9 items-center justify-center rounded-xl bg-sky-400/10 text-sky-400 border border-sky-400/20">
-              <Dumbbell className="size-4" />
-            </div>
-            <div>
-              <h2 className="text-base font-extrabold text-white">Gym Branding & Identity</h2>
-              <p className="text-xs text-white/40">Portal header display details</p>
-            </div>
-          </div>
-
-          <div className="grid gap-4 sm:grid-cols-2">
-            <label className="grid gap-1.5 text-xs font-bold text-white/70">
-              Gym Name
-              <input
-                type="text"
-                value={gymName}
-                onChange={(e) => setGymName(e.target.value)}
-                className="h-11 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 text-sm font-normal text-white outline-none focus:border-theme-accent/60 transition"
-              />
-            </label>
-
-            <label className="grid gap-1.5 text-xs font-bold text-white/70">
-              City / Location
-              <input
-                type="text"
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-                className="h-11 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 text-sm font-normal text-white outline-none focus:border-theme-accent/60 transition"
-              />
-            </label>
-          </div>
-        </div>
-
-        {/* Plan Pricing Configuration */}
-        <div className="rounded-2xl border border-white/[0.08] bg-[#0d100f] p-6 space-y-4">
-          <div className="flex items-center gap-3 pb-3 border-b border-white/[0.06]">
-            <div className="flex size-9 items-center justify-center rounded-xl bg-theme-accent/10 text-theme-accent border border-theme-accent/20">
-              <Sliders className="size-4" />
-            </div>
-            <div>
-              <h2 className="text-base font-extrabold text-white">Default Plan Pricing (PKR)</h2>
-              <p className="text-xs text-white/40">Default rates auto-assigned when adding new members</p>
-            </div>
-          </div>
-
-          <div className="grid gap-4 sm:grid-cols-2">
-            <label className="grid gap-1.5 text-xs font-bold text-white/70">
-              Standard Gym Monthly Fee
-              <div className="relative">
-                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 font-bold text-theme-accent text-sm">
-                  Rs.
-                </span>
-                <input
-                  type="number"
-                  value={standardFee}
-                  onChange={(e) => setStandardFee(Number(e.target.value))}
-                  className="h-11 w-full rounded-xl border border-white/10 bg-white/[0.04] pl-11 pr-3.5 text-sm font-extrabold text-white outline-none focus:border-theme-accent/60 transition"
-                />
+                <div>
+                  <h2 className="text-base font-extrabold text-white">Gym Branding & Identity</h2>
+                  <p className="text-xs text-white/40">Portal header display details</p>
+                </div>
               </div>
-            </label>
 
-            <label className="grid gap-1.5 text-xs font-bold text-white/70">
-              Treadmill Pro Monthly Fee
-              <div className="relative">
-                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 font-bold text-theme-accent text-sm">
-                  Rs.
-                </span>
-                <input
-                  type="number"
-                  value={treadmillFee}
-                  onChange={(e) => setTreadmillFee(Number(e.target.value))}
-                  className="h-11 w-full rounded-xl border border-white/10 bg-white/[0.04] pl-11 pr-3.5 text-sm font-extrabold text-white outline-none focus:border-theme-accent/60 transition"
-                />
+              <div className="grid gap-4 sm:grid-cols-2">
+                <label className="grid gap-1.5 text-xs font-bold text-white/70">
+                  Gym Name
+                  <input
+                    type="text"
+                    value={gymName}
+                    onChange={(e) => setGymName(e.target.value)}
+                    className="h-11 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 text-sm font-normal text-white outline-none focus:border-theme-accent/60 transition"
+                  />
+                </label>
+
+                <label className="grid gap-1.5 text-xs font-bold text-white/70">
+                  City / Location
+                  <input
+                    type="text"
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
+                    className="h-11 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 text-sm font-normal text-white outline-none focus:border-theme-accent/60 transition"
+                  />
+                </label>
               </div>
-            </label>
-          </div>
-        </div>
-
-        {/* Shift Operational Hours Manager */}
-        <div className="rounded-2xl border border-white/[0.08] bg-[#0d100f] p-6 space-y-4">
-          <div className="flex items-center gap-3 pb-3 border-b border-white/[0.06]">
-            <div className="flex size-9 items-center justify-center rounded-xl bg-amber-400/10 text-amber-400 border border-amber-400/20">
-              <Clock className="size-4" />
             </div>
-            <div>
-              <h2 className="text-base font-extrabold text-white">Operational Shift Schedule</h2>
-              <p className="text-xs text-white/40">Configure {gymName} daily shift hours</p>
+
+            {/* Plan Pricing Configuration */}
+            <div className="rounded-2xl border border-white/[0.08] bg-[#0d100f] p-6 space-y-4">
+              <div className="flex items-center gap-3 pb-3 border-b border-white/[0.06]">
+                <div className="flex size-9 items-center justify-center rounded-xl bg-theme-accent/10 text-theme-accent border border-theme-accent/20">
+                  <Sliders className="size-4" />
+                </div>
+                <div>
+                  <h2 className="text-base font-extrabold text-white">Default Plan Pricing (PKR)</h2>
+                  <p className="text-xs text-white/40">Default rates auto-assigned when adding new members</p>
+                </div>
+              </div>
+
+              <div className="grid gap-4 sm:grid-cols-2">
+                <label className="grid gap-1.5 text-xs font-bold text-white/70">
+                  Standard Gym Monthly Fee
+                  <div className="relative">
+                    <span className="absolute left-3.5 top-1/2 -translate-y-1/2 font-bold text-theme-accent text-sm">
+                      Rs.
+                    </span>
+                    <input
+                      type="number"
+                      value={standardFee}
+                      onChange={(e) => setStandardFee(Number(e.target.value))}
+                      className="h-11 w-full rounded-xl border border-white/10 bg-white/[0.04] pl-11 pr-3.5 text-sm font-extrabold text-white outline-none focus:border-theme-accent/60 transition"
+                    />
+                  </div>
+                </label>
+
+                <label className="grid gap-1.5 text-xs font-bold text-white/70">
+                  Treadmill Pro Monthly Fee
+                  <div className="relative">
+                    <span className="absolute left-3.5 top-1/2 -translate-y-1/2 font-bold text-theme-accent text-sm">
+                      Rs.
+                    </span>
+                    <input
+                      type="number"
+                      value={treadmillFee}
+                      onChange={(e) => setTreadmillFee(Number(e.target.value))}
+                      className="h-11 w-full rounded-xl border border-white/10 bg-white/[0.04] pl-11 pr-3.5 text-sm font-extrabold text-white outline-none focus:border-theme-accent/60 transition"
+                    />
+                  </div>
+                </label>
+              </div>
             </div>
-          </div>
 
-          <div className="grid gap-4 sm:grid-cols-3">
-            <label className="grid gap-1.5 text-xs font-bold text-theme-accent">
-              Morning Shift Hours
-              <input
-                type="text"
-                value={morningShift}
-                onChange={(e) => setMorningShift(e.target.value)}
-                placeholder="06:00 AM – 11:30 AM"
-                className="h-11 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 text-xs font-semibold text-white outline-none focus:border-theme-accent/60 transition"
-              />
-              <span className="text-[10px] font-normal text-white/40">Open for all athletes</span>
-            </label>
+            {/* Shift Operational Hours Manager */}
+            <div className="rounded-2xl border border-white/[0.08] bg-[#0d100f] p-6 space-y-4">
+              <div className="flex items-center gap-3 pb-3 border-b border-white/[0.06]">
+                <div className="flex size-9 items-center justify-center rounded-xl bg-amber-400/10 text-amber-400 border border-amber-400/20">
+                  <Clock className="size-4" />
+                </div>
+                <div>
+                  <h2 className="text-base font-extrabold text-white">Operational Shift Schedule</h2>
+                  <p className="text-xs text-white/40">Configure {gymName} daily shift hours</p>
+                </div>
+              </div>
 
-            <label className="grid gap-1.5 text-xs font-bold text-pink-400">
-              Ladies Exclusive Shift Hours
-              <input
-                type="text"
-                value={ladiesShift}
-                onChange={(e) => setLadiesShift(e.target.value)}
-                placeholder="12:00 PM – 04:00 PM"
-                className="h-11 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 text-xs font-semibold text-white outline-none focus:border-pink-400/60 transition"
-              />
-              <span className="text-[10px] font-normal text-white/40">Female trainers & athletes only</span>
-            </label>
+              <div className="grid gap-4 sm:grid-cols-3">
+                <label className="grid gap-1.5 text-xs font-bold text-theme-accent">
+                  Morning Shift Hours
+                  <input
+                    type="text"
+                    value={morningShift}
+                    onChange={(e) => setMorningShift(e.target.value)}
+                    placeholder="06:00 AM – 11:30 AM"
+                    className="h-11 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 text-xs font-semibold text-white outline-none focus:border-theme-accent/60 transition"
+                  />
+                  <span className="text-[10px] font-normal text-white/40">Open for all athletes</span>
+                </label>
 
-            <label className="grid gap-1.5 text-xs font-bold text-sky-400">
-              Evening Peak Shift Hours
-              <input
-                type="text"
-                value={eveningShift}
-                onChange={(e) => setEveningShift(e.target.value)}
-                placeholder="04:30 PM – 11:00 PM"
-                className="h-11 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 text-xs font-semibold text-white outline-none focus:border-sky-400/60 transition"
-              />
-              <span className="text-[10px] font-normal text-white/40">Open for all athletes</span>
-            </label>
-          </div>
-        </div>
+                <label className="grid gap-1.5 text-xs font-bold text-pink-400">
+                  Ladies Shift Hours
+                  <input
+                    type="text"
+                    value={ladiesShift}
+                    onChange={(e) => setLadiesShift(e.target.value)}
+                    placeholder="12:00 PM – 04:00 PM"
+                    className="h-11 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 text-xs font-semibold text-white outline-none focus:border-pink-400/60 transition"
+                  />
+                  <span className="text-[10px] font-normal text-white/40">Female trainers & athletes</span>
+                </label>
 
-        {/* Admin Account & Security Settings */}
-        <div className="rounded-2xl border border-white/[0.08] bg-[#0d100f] p-6 space-y-4">
-          <div className="flex items-center gap-3 pb-3 border-b border-white/[0.06]">
-            <div className="flex size-9 items-center justify-center rounded-xl bg-red-400/10 text-red-400 border border-red-400/20">
-              <Shield className="size-4" />
+                <label className="grid gap-1.5 text-xs font-bold text-sky-400">
+                  Evening Shift Hours
+                  <input
+                    type="text"
+                    value={eveningShift}
+                    onChange={(e) => setEveningShift(e.target.value)}
+                    placeholder="04:30 PM – 11:00 PM"
+                    className="h-11 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 text-xs font-semibold text-white outline-none focus:border-sky-400/60 transition"
+                  />
+                  <span className="text-[10px] font-normal text-white/40">Open for all athletes</span>
+                </label>
+              </div>
             </div>
-            <div>
-              <h2 className="text-base font-extrabold text-white">Admin Account Security</h2>
-              <p className="text-xs text-white/40">Update login email and administrator password</p>
-            </div>
-          </div>
-
-          {credError && (
-            <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-semibold">
-              ⚠️ {credError}
-            </div>
-          )}
-
-          {credSuccess && (
-            <div className="p-3 rounded-xl bg-theme-accent/10 border border-theme-accent/30 text-theme-accent text-xs font-semibold">
-              ✓ {credSuccess}
-            </div>
-          )}
-
-          <div className="grid gap-4 sm:grid-cols-2">
-            <label className="grid gap-1.5 text-xs font-bold text-white/70">
-              Admin Login Email
-              <input
-                type="email"
-                required
-                value={adminEmail}
-                onChange={(e) => setAdminEmail(e.target.value)}
-                placeholder="admin@ironforge.pk"
-                className="h-11 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 text-xs font-semibold text-white outline-none focus:border-theme-accent/60 transition"
-              />
-            </label>
-
-            <label className="grid gap-1.5 text-xs font-bold text-white/70">
-              Current Password (Required to verify)
-              <input
-                type="password"
-                required
-                value={currentPassword}
-                onChange={(e) => setCurrentPassword(e.target.value)}
-                placeholder="Enter current password"
-                className="h-11 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 text-xs font-semibold text-white outline-none focus:border-theme-accent/60 transition"
-              />
-            </label>
-
-            <label className="grid gap-1.5 text-xs font-bold text-white/70">
-              New Password
-              <input
-                type="password"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                placeholder="Leave blank to keep unchanged"
-                className="h-11 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 text-xs font-semibold text-white outline-none focus:border-theme-accent/60 transition"
-              />
-            </label>
-
-            <label className="grid gap-1.5 text-xs font-bold text-white/70">
-              Confirm New Password
-              <input
-                type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                placeholder="Repeat new password"
-                className="h-11 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 text-xs font-semibold text-white outline-none focus:border-theme-accent/60 transition"
-              />
-            </label>
           </div>
 
-          <div className="pt-2 flex justify-end">
-            <button
-              type="button"
-              onClick={handleUpdateCredentials}
-              disabled={credLoading}
-              className="flex h-10 items-center gap-2 rounded-xl bg-red-500/20 border border-red-500/40 px-4 text-xs font-bold text-red-300 transition hover:bg-red-500/30 active:scale-95 disabled:opacity-50 cursor-pointer"
-            >
-              {credLoading ? (
-                <span>Updating Credentials...</span>
-              ) : (
-                <>
-                  <Shield className="size-3.5" />
-                  <span>Update Admin Login Credentials</span>
-                </>
+          {/* Right Column: Theme Customizer, Security Credentials, System Audit */}
+          <div className="space-y-6">
+            {/* Live Theme Accent Customizer */}
+            <div className="rounded-2xl border border-white/[0.08] bg-[#0d100f] p-6 space-y-4">
+              <div className="flex items-center gap-3 pb-3 border-b border-white/[0.06]">
+                <div className="flex size-9 items-center justify-center rounded-xl bg-theme-accent/10 text-theme-accent border border-theme-accent/20">
+                  <Palette className="size-4" />
+                </div>
+                <div>
+                  <h2 className="text-base font-extrabold text-white">Live Theme Accent Customizer</h2>
+                  <p className="text-xs text-white/40">Select your preferred portal accent color theme</p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                {themeOptions.map((t) => (
+                  <button
+                    key={t.id}
+                    type="button"
+                    onClick={() => handleThemeSelect(t.id)}
+                    className={`flex items-center gap-3 rounded-xl border p-3 text-left transition ${
+                      activeTheme === t.id
+                        ? 'border-theme-accent bg-white/[0.06] shadow-[0_0_15px_rgba(var(--brand-accent-rgb),0.25)]'
+                        : 'border-white/10 bg-white/[0.02] hover:bg-white/[0.05]'
+                    }`}
+                  >
+                    <span className={`size-5 rounded-full ${t.bgClass} shadow-md`} />
+                    <div>
+                      <p className="text-xs font-bold text-white">{t.name}</p>
+                      <p className="text-[10px] text-white/40">{t.hex}</p>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Admin Account & Security Settings */}
+            <div className="rounded-2xl border border-white/[0.08] bg-[#0d100f] p-6 space-y-4">
+              <div className="flex items-center gap-3 pb-3 border-b border-white/[0.06]">
+                <div className="flex size-9 items-center justify-center rounded-xl bg-red-400/10 text-red-400 border border-red-400/20">
+                  <Shield className="size-4" />
+                </div>
+                <div>
+                  <h2 className="text-base font-extrabold text-white">Admin Account Security</h2>
+                  <p className="text-xs text-white/40">Update login email and administrator password</p>
+                </div>
+              </div>
+
+              {credError && (
+                <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-semibold">
+                  ⚠️ {credError}
+                </div>
               )}
-            </button>
+
+              {credSuccess && (
+                <div className="p-3 rounded-xl bg-theme-accent/10 border border-theme-accent/30 text-theme-accent text-xs font-semibold">
+                  ✓ {credSuccess}
+                </div>
+              )}
+
+              <div className="grid gap-4 sm:grid-cols-2">
+                <label className="grid gap-1.5 text-xs font-bold text-white/70">
+                  Admin Login Email
+                  <input
+                    type="email"
+                    required
+                    value={adminEmail}
+                    onChange={(e) => setAdminEmail(e.target.value)}
+                    placeholder="admin@ironforge.pk"
+                    className="h-11 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 text-xs font-semibold text-white outline-none focus:border-theme-accent/60 transition"
+                  />
+                </label>
+
+                <label className="grid gap-1.5 text-xs font-bold text-white/70">
+                  Current Password (Required)
+                  <input
+                    type="password"
+                    required
+                    value={currentPassword}
+                    onChange={(e) => setCurrentPassword(e.target.value)}
+                    placeholder="Enter current password"
+                    className="h-11 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 text-xs font-semibold text-white outline-none focus:border-theme-accent/60 transition"
+                  />
+                </label>
+
+                <label className="grid gap-1.5 text-xs font-bold text-white/70">
+                  New Password
+                  <input
+                    type="password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    placeholder="Leave blank to keep unchanged"
+                    className="h-11 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 text-xs font-semibold text-white outline-none focus:border-theme-accent/60 transition"
+                  />
+                </label>
+
+                <label className="grid gap-1.5 text-xs font-bold text-white/70">
+                  Confirm New Password
+                  <input
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    placeholder="Repeat new password"
+                    className="h-11 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 text-xs font-semibold text-white outline-none focus:border-theme-accent/60 transition"
+                  />
+                </label>
+              </div>
+
+              <div className="pt-2 flex justify-end">
+                <button
+                  type="button"
+                  onClick={handleUpdateCredentials}
+                  disabled={credLoading}
+                  className="flex h-10 items-center gap-2 rounded-xl bg-red-500/20 border border-red-500/40 px-4 text-xs font-bold text-red-300 transition hover:bg-red-500/30 active:scale-95 disabled:opacity-50 cursor-pointer"
+                >
+                  {credLoading ? (
+                    <span>Updating Credentials...</span>
+                  ) : (
+                    <>
+                      <Shield className="size-3.5" />
+                      <span>Update Admin Login Credentials</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+
+            {/* Currency & Security Audit */}
+            <div className="rounded-2xl border border-white/[0.08] bg-[#0d100f] p-6 space-y-4">
+              <div className="flex items-center gap-3 pb-3 border-b border-white/[0.06]">
+                <div className="flex size-9 items-center justify-center rounded-xl bg-violet-400/10 text-violet-400 border border-violet-400/20">
+                  <Shield className="size-4" />
+                </div>
+                <div>
+                  <h2 className="text-base font-extrabold text-white">System Audit & Defaults</h2>
+                  <p className="text-xs text-white/40">Regional currency & database audit logs</p>
+                </div>
+              </div>
+
+              <div className="grid gap-4 sm:grid-cols-2">
+                <label className="grid gap-1.5 text-xs font-bold text-white/70">
+                  System Currency
+                  <input
+                    type="text"
+                    disabled
+                    value={currency}
+                    className="h-11 rounded-xl border border-white/10 bg-white/[0.02] px-3.5 text-sm font-normal text-white/50 cursor-not-allowed"
+                  />
+                </label>
+
+                <div className="grid gap-1.5 text-xs font-bold text-white/70">
+                  <span>Database Activity Audit Logs</span>
+                  <button
+                    type="button"
+                    onClick={onOpenAuditLogs}
+                    className="flex h-11 items-center justify-center gap-2 rounded-xl border border-theme-accent/30 bg-theme-accent/10 px-4 text-xs font-bold text-theme-accent transition hover:bg-theme-accent/20 active:scale-95"
+                  >
+                    <Shield className="size-4" />
+                    <span>View System Audit Activity Logs</span>
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Currency & Security Audit */}
-        <div className="rounded-2xl border border-white/[0.08] bg-[#0d100f] p-6 space-y-4">
-          <div className="flex items-center gap-3 pb-3 border-b border-white/[0.06]">
-            <div className="flex size-9 items-center justify-center rounded-xl bg-violet-400/10 text-violet-400 border border-violet-400/20">
-              <Shield className="size-4" />
-            </div>
-            <div>
-              <h2 className="text-base font-extrabold text-white">System Audit & Defaults</h2>
-              <p className="text-xs text-white/40">Regional currency & database audit logs</p>
-            </div>
-          </div>
-
-          <div className="grid gap-4 sm:grid-cols-2">
-            <label className="grid gap-1.5 text-xs font-bold text-white/70">
-              System Currency
-              <input
-                type="text"
-                disabled
-                value={currency}
-                className="h-11 rounded-xl border border-white/10 bg-white/[0.02] px-3.5 text-sm font-normal text-white/50 cursor-not-allowed"
-              />
-            </label>
-
-            <div className="grid gap-1.5 text-xs font-bold text-white/70">
-              <span>Database Activity Audit Logs</span>
-              <button
-                type="button"
-                onClick={onOpenAuditLogs}
-                className="flex h-11 items-center justify-center gap-2 rounded-xl border border-theme-accent/30 bg-theme-accent/10 px-4 text-xs font-bold text-theme-accent transition hover:bg-theme-accent/20 active:scale-95"
-              >
-                <Shield className="size-4" />
-                <span>View System Audit Activity Logs</span>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Submit */}
-        <div className="flex items-center gap-3 pt-2">
+        {/* Submit Button Bar */}
+        <div className="flex items-center gap-3 pt-4 border-t border-white/[0.08]">
           <button
             type="submit"
             className="flex h-11 items-center gap-2 rounded-xl bg-theme-accent px-6 text-sm font-black text-theme-btn shadow-[0_0_20px_rgba(var(--brand-accent-rgb),0.25)] transition hover:bg-theme-accent-hover active:scale-95"
