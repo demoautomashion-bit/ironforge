@@ -62,22 +62,8 @@ export default function LoginPage() {
           <div className="flex flex-col items-center text-center mb-8">
             <div className="relative group cursor-pointer mb-4">
               {/* Logo Outer Glow Container */}
-              <div className="w-24 h-24 rounded-2xl bg-gradient-to-b from-[#ccff00]/20 to-[#18202c] border-2 border-dashed border-[#ccff00]/40 flex flex-col items-center justify-center relative overflow-hidden transition-all duration-300 group-hover:border-[#ccff00] group-hover:scale-105 shadow-lg shadow-[#ccff00]/5">
-                
-                {/* Visual indicator tag for logo slot */}
-                <span className="absolute top-1 text-[9px] font-mono tracking-widest text-[#ccff00] uppercase opacity-80 px-1 bg-black/40 rounded">
-                  LOGO SLOT
-                </span>
-
-                {/* LOGO IMAGE PLACEHOLDER ICON (Replace with <img> when logo file is provided) */}
-                <div className="flex flex-col items-center justify-center mt-2 text-[#ccff00]">
-                  <Dumbbell className="size-8 transform -rotate-12 group-hover:scale-110 transition-transform" />
-                </div>
-
-                <div className="absolute bottom-1 text-[8px] text-slate-400 font-mono flex items-center gap-0.5">
-                  <ImageIcon className="size-2.5 text-[#ccff00]" />
-                  <span>Your Logo Here</span>
-                </div>
+              <div className="w-24 h-24 rounded-2xl border-2 border-[#ccff00]/60 bg-black flex items-center justify-center overflow-hidden transition-all duration-300 group-hover:border-[#ccff00] group-hover:scale-105 shadow-[0_0_30px_rgba(204,255,0,0.25)]">
+                <img src="/ironforge.jpeg" alt="Iron Forge Logo" className="w-full h-full object-cover" />
               </div>
             </div>
 

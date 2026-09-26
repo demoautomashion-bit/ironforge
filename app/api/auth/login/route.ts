@@ -21,7 +21,7 @@ export async function POST(request: Request) {
         },
       })
 
-      // Set HttpOnly, SameSite cookie to defend against XSS & Session Hijacking
+      // Set HttpOnly, SameSite Session Cookie (Omit maxAge so it clears when browser/tab closes)
       response.cookies.set({
         name: 'iron_session',
         value: 'iron_admin_session_valid_' + Date.now(),
@@ -29,7 +29,6 @@ export async function POST(request: Request) {
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'lax',
         path: '/',
-        maxAge: 60 * 60 * 24 * 7, // 7 days session
       })
 
       return response

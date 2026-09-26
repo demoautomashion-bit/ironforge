@@ -55,8 +55,8 @@ export function Header({
         <div className="mx-auto flex h-[70px] max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           {/* Logo & Gym Title */}
           <div className="flex items-center gap-3">
-            <div className="flex size-10 items-center justify-center rounded-xl bg-theme-accent text-theme-btn shadow-[0_0_25px_rgba(var(--brand-accent-rgb),0.25)] transition hover:scale-105">
-              <Dumbbell className="size-5" />
+            <div className="flex size-10 items-center justify-center rounded-xl border border-[#ccff00]/40 overflow-hidden bg-black shadow-[0_0_20px_rgba(var(--brand-accent-rgb),0.25)] transition hover:scale-105">
+              <img src="/ironforge.jpeg" alt="Iron Forge Logo" className="size-full object-cover" />
             </div>
             <div>
               <div className="flex items-center gap-2">
