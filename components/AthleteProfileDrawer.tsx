@@ -57,7 +57,7 @@ export function AthleteProfileDrawer({
                 <span
                   className={`rounded-full px-2.5 py-0.5 text-[10px] font-extrabold uppercase ${
                     status === 'Active'
-                      ? 'bg-[#ccff00]/15 text-[#ccff00] border border-[#ccff00]/30'
+                      ? 'bg-theme-accent/15 text-theme-accent border border-theme-accent/30'
                       : status === 'Due Soon'
                       ? 'bg-amber-400/15 text-amber-300 border border-amber-400/30'
                       : 'bg-rose-400/15 text-rose-400 border border-rose-400/30'
@@ -82,9 +82,9 @@ export function AthleteProfileDrawer({
         <div className="mb-5 rounded-2xl border border-white/[0.08] bg-white/[0.025] p-4 space-y-2">
           <div className="flex items-center justify-between text-xs font-bold text-white">
             <span className="flex items-center gap-1.5 text-white/70">
-              <Clock className="size-3.5 text-[#ccff00]" /> 30-Day Billing Cycle
+              <Clock className="size-3.5 text-theme-accent" /> 30-Day Billing Cycle
             </span>
-            <span className={status === 'Active' ? 'text-[#ccff00]' : status === 'Due Soon' ? 'text-amber-300' : 'text-rose-400'}>
+            <span className={status === 'Active' ? 'text-theme-accent' : status === 'Due Soon' ? 'text-amber-300' : 'text-rose-400'}>
               {status === 'Active' ? `${daysRemaining} Days Left` : status === 'Due Soon' ? `Expires in ${daysRemaining} days` : 'Payment Overdue'}
             </span>
           </div>
@@ -93,7 +93,7 @@ export function AthleteProfileDrawer({
             <div
               className={`h-full rounded-full transition-all duration-500 ${
                 status === 'Active'
-                  ? 'bg-gradient-to-r from-[#ccff00] to-emerald-400 shadow-[0_0_8px_#ccff00]'
+                  ? 'bg-gradient-to-r from-theme-accent to-emerald-400 shadow-[0_0_8px_rgba(var(--brand-accent-rgb),0.5)]'
                   : status === 'Due Soon'
                   ? 'bg-amber-400'
                   : 'bg-rose-500'
@@ -116,7 +116,7 @@ export function AthleteProfileDrawer({
           </div>
           <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3">
             <span className="text-[10px] uppercase font-bold text-white/40">Monthly Dues (PKR)</span>
-            <p className="mt-1 font-extrabold text-[#ccff00] text-sm">{formatPKR(member.monthlyFee)}</p>
+            <p className="mt-1 font-extrabold text-theme-accent text-sm">{formatPKR(member.monthlyFee)}</p>
           </div>
           <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3">
             <span className="text-[10px] uppercase font-bold text-white/40">Phone Number</span>
@@ -130,34 +130,8 @@ export function AthleteProfileDrawer({
           </div>
         </div>
 
-        {/* Plan Perks Included */}
-        <div className="mb-5 rounded-2xl border border-white/[0.08] bg-white/[0.02] p-4">
-          <p className="mb-2.5 flex items-center gap-2 text-xs font-bold text-white">
-            <Award className="size-4 text-[#ccff00]" /> Included Tier Benefits
-          </p>
-          <div className="space-y-1.5 text-xs text-white/70">
-            {planPerks.map((perk, i) => (
-              <div key={i} className="flex items-center gap-2">
-                <Check className="size-3.5 text-[#ccff00]" />
-                <span>{perk}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
         {/* Actions List */}
         <div className="space-y-2">
-          {/* Digital Receipt Trigger */}
-          <button
-            onClick={() => {
-              onOpenReceipt(member)
-              onClose()
-            }}
-            className="flex w-full items-center justify-center gap-2 rounded-xl border border-sky-400/30 bg-sky-400/10 py-3 text-xs font-bold text-sky-400 transition hover:bg-sky-400/20 active:scale-95"
-          >
-            <Dumbbell className="size-4" />
-            <span>Generate Digital PKR Receipt</span>
-          </button>
 
           {/* Mark Fee Paid */}
           <button
@@ -169,7 +143,7 @@ export function AthleteProfileDrawer({
             className={`flex w-full items-center justify-center gap-2 rounded-xl border py-3 text-xs font-bold transition active:scale-95 ${
               member.status === 'Active'
                 ? 'border-white/10 bg-white/[0.04] text-white/30 cursor-not-allowed'
-                : 'border-[#ccff00]/40 bg-[#ccff00]/10 text-[#ccff00] hover:bg-[#ccff00]/20 shadow-[0_0_15px_rgba(204,255,0,0.15)]'
+                : 'border-theme-accent/40 bg-theme-accent/10 text-theme-accent hover:bg-theme-accent/20 shadow-[0_0_15px_rgba(var(--brand-accent-rgb),0.15)]'
             }`}
           >
             <Check className="size-4" />

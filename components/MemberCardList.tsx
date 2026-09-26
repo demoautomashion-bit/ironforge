@@ -42,7 +42,7 @@ export function MemberCardList({ members, onMarkPaid, onOpenActionSheet, onOpenD
                 <h3 className="text-base font-extrabold text-white">{member.name}</h3>
                 <span className={`inline-block rounded-md px-2 py-0.5 text-[10px] font-semibold ${
                   member.plan === 'Treadmill Pro'
-                    ? 'bg-[#ccff00]/15 text-[#ccff00] border border-[#ccff00]/30'
+                    ? 'bg-theme-accent/15 text-theme-accent border border-theme-accent/30'
                     : 'bg-white/[0.06] text-white/60'
                 }`}>
                   {member.plan}
@@ -57,7 +57,7 @@ export function MemberCardList({ members, onMarkPaid, onOpenActionSheet, onOpenD
           <div className="mt-3.5 grid grid-cols-2 gap-2 rounded-xl border border-white/[0.05] bg-white/[0.02] p-3 text-xs">
             <div>
               <span className="text-[10px] uppercase font-bold tracking-wider text-white/35">Monthly Fee</span>
-              <p className="font-extrabold text-[#ccff00]">{formatPKR(member.monthlyFee)}</p>
+              <p className="font-extrabold text-theme-accent">{formatPKR(member.monthlyFee)}</p>
             </div>
             <div>
               <span className="text-[10px] uppercase font-bold tracking-wider text-white/35">Last Paid</span>
@@ -65,7 +65,7 @@ export function MemberCardList({ members, onMarkPaid, onOpenActionSheet, onOpenD
             </div>
             <div className="col-span-2 flex items-center justify-between border-t border-white/[0.05] pt-2 mt-1">
               <span className="flex items-center gap-1.5 text-white/50 text-[11px]">
-                <PhoneCall className="size-3 text-[#ccff00]" />
+                <PhoneCall className="size-3 text-theme-accent" />
                 {member.phone ? member.phone : <span className="italic text-white/30">No Contact</span>}
               </span>
               <span className="flex items-center gap-1 text-white/40 text-[10px]">
@@ -83,7 +83,7 @@ export function MemberCardList({ members, onMarkPaid, onOpenActionSheet, onOpenD
               className={`flex h-10 flex-1 items-center justify-center gap-1.5 rounded-xl border text-xs font-bold transition-all duration-200 active:scale-95 ${
                 member.status === 'Active'
                   ? 'border-white/10 bg-white/[0.04] text-white/30 cursor-not-allowed'
-                  : 'border-[#ccff00]/40 bg-[#ccff00]/10 text-[#ccff00] hover:bg-[#ccff00]/20 shadow-[0_0_15px_rgba(204,255,0,0.15)]'
+                  : 'border-theme-accent/40 bg-theme-accent/10 text-theme-accent hover:bg-theme-accent/20 shadow-[0_0_15px_rgba(var(--brand-accent-rgb),0.15)]'
               }`}
             >
               <Check className="size-3.5" />
@@ -119,7 +119,7 @@ export function MemberCardList({ members, onMarkPaid, onOpenActionSheet, onOpenD
 
 function StatusBadge({ status }: { status: string }) {
   const styles = {
-    Active: 'border-[#ccff00]/30 bg-[#ccff00]/10 text-[#ccff00]',
+    Active: 'border-theme-accent/30 bg-theme-accent/10 text-theme-accent',
     'Due Soon': 'border-amber-300/30 bg-amber-300/10 text-amber-300',
     Overdue: 'border-rose-400/30 bg-rose-400/10 text-rose-400',
   }

@@ -58,9 +58,9 @@ export function MemberActionSheet({
         <div className="mb-5 space-y-2.5 rounded-2xl border border-white/[0.08] bg-white/[0.03] p-4 text-xs">
           <div className="flex items-center justify-between border-b border-white/[0.06] pb-2.5">
             <span className="flex items-center gap-2 text-white/50">
-              <Dumbbell className="size-3.5 text-[#ccff00]" /> Monthly Dues
+              <Dumbbell className="size-3.5 text-theme-accent" /> Monthly Dues
             </span>
-            <span className="font-extrabold text-[#ccff00] text-sm">{formatPKR(member.monthlyFee)}</span>
+            <span className="font-extrabold text-theme-accent text-sm">{formatPKR(member.monthlyFee)}</span>
           </div>
 
           <div className="flex items-center justify-between border-b border-white/[0.06] pb-2.5">
@@ -86,7 +86,7 @@ export function MemberActionSheet({
             <span
               className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider ${
                 member.status === 'Active'
-                  ? 'bg-[#ccff00]/15 text-[#ccff00]'
+                  ? 'bg-theme-accent/15 text-theme-accent'
                   : member.status === 'Due Soon'
                   ? 'bg-amber-400/15 text-amber-300'
                   : 'bg-rose-400/15 text-rose-400'
@@ -109,7 +109,7 @@ export function MemberActionSheet({
             className={`flex w-full items-center justify-center gap-2 rounded-xl border py-3 text-xs font-bold transition active:scale-95 ${
               member.status === 'Active'
                 ? 'border-white/10 bg-white/[0.04] text-white/30 cursor-not-allowed'
-                : 'border-[#ccff00]/40 bg-[#ccff00]/10 text-[#ccff00] hover:bg-[#ccff00]/20 shadow-[0_0_15px_rgba(204,255,0,0.15)]'
+                : 'border-theme-accent/40 bg-theme-accent/10 text-theme-accent hover:bg-theme-accent/20 shadow-[0_0_15px_rgba(var(--brand-accent-rgb),0.15)]'
             }`}
           >
             <Check className="size-4" />

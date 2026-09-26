@@ -75,6 +75,17 @@ class NeonGymDatabase {
       ]
     }
 
+    const allRecords = await prisma.member.findMany({
+      where: { deletedAt: null },
+      orderBy: { createdAt: 'asc' },
+    })
+
+    // Build ID map to assign progressive 3-digit IDs (001, 002, 003...)
+    const idMap = new Map<string, string>()
+    allRecords.forEach((m, idx) => {
+      idMap.set(m.id, String(idx + 1).padStart(3, '0'))
+    })
+
     const records = await prisma.member.findMany({
       where: whereClause,
       orderBy: { createdAt: 'desc' },
@@ -82,8 +93,9 @@ class NeonGymDatabase {
 
     return records.map((m) => {
       const computedStatus = calculatePaymentStatus(m.paymentDate).status
+      const seqId = idMap.get(m.id) || m.id
       return {
-        id: m.id,
+        id: seqId,
         name: m.name,
         initials: m.initials,
         phone: m.phone || undefined,
@@ -142,8 +154,11 @@ class NeonGymDatabase {
 
     await this.logAudit('MEMBER_CREATED', `Registered athlete ${created.name} in Neon PostgreSQL database.`)
 
+    const activeCount = await prisma.member.count({ where: { deletedAt: null } })
+    const seqId = String(activeCount).padStart(3, '0')
+
     return {
-      id: created.id,
+      id: seqId,
       name: created.name,
       initials: created.initials,
       phone: created.phone || undefined,

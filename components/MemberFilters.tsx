@@ -45,7 +45,7 @@ export function MemberFilters({
               onClick={() => setGender(item)}
               className={`flex-1 rounded-lg px-3 py-2 text-center transition-all ${
                 gender === item
-                  ? 'bg-[#ccff00] text-black shadow-md shadow-[#ccff00]/10'
+                  ? 'bg-theme-accent text-theme-btn shadow-md shadow-theme-accent/10'
                   : 'text-white/50 hover:text-white'
               }`}
             >
@@ -65,7 +65,7 @@ export function MemberFilters({
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search by name, phone..."
-            className="h-11 w-full rounded-xl border border-white/10 bg-white/[0.04] pl-10 pr-9 text-sm text-white placeholder-white/30 transition outline-none focus:border-[#ccff00]/60 focus:bg-white/[0.06] focus:ring-1 focus:ring-[#ccff00]/30"
+            className="h-11 w-full rounded-xl border border-white/10 bg-white/[0.04] pl-10 pr-9 text-sm text-white placeholder-white/30 transition outline-none focus:border-theme-accent/60 focus:bg-white/[0.06] focus:ring-1 focus:ring-theme-accent/30"
           />
           {query && (
             <button

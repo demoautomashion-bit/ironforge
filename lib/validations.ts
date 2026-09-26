@@ -7,6 +7,7 @@ export interface CreateMemberPayload {
   gender: 'Male' | 'Female'
   plan: 'Standard Gym' | 'Treadmill Pro'
   monthlyFee: number
+  photoUrl?: string
 }
 
 export interface UpdateMemberPayload {
@@ -16,6 +17,7 @@ export interface UpdateMemberPayload {
   plan?: 'Standard Gym' | 'Treadmill Pro'
   monthlyFee?: number
   status?: 'Active' | 'Due Soon' | 'Overdue'
+  photoUrl?: string
 }
 
 export interface RecordPaymentPayload {
@@ -66,6 +68,7 @@ export function validateCreateMember(data: any): { valid: boolean; errors: strin
   const gender = data.gender === 'Female' ? 'Female' : 'Male'
   const plan = data.plan === 'Treadmill Pro' ? 'Treadmill Pro' : 'Standard Gym'
   const monthlyFee = Number(data.monthlyFee)
+  const photoUrl = typeof data.photoUrl === 'string' && data.photoUrl.trim() ? data.photoUrl.trim() : undefined
 
   if (isNaN(monthlyFee) || monthlyFee < 0 || monthlyFee > 1000000) {
     errors.push('Monthly fee must be a valid positive PKR amount.')
@@ -78,7 +81,7 @@ export function validateCreateMember(data: any): { valid: boolean; errors: strin
   return {
     valid: true,
     errors: [],
-    data: { name, phone, gender, plan, monthlyFee },
+    data: { name, phone, gender, plan, monthlyFee, photoUrl },
   }
 }
 

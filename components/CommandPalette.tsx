@@ -105,10 +105,10 @@ export function CommandPalette({
                         onNavigate(p.id)
                         onClose()
                       }}
-                      className="flex items-center justify-between rounded-xl border border-white/[0.06] bg-white/[0.03] p-3 text-left transition hover:border-[#ccff00]/40 hover:bg-[#ccff00]/10"
+                      className="flex items-center justify-between rounded-xl border border-white/[0.06] bg-white/[0.03] p-3 text-left transition hover:border-theme-accent/40 hover:bg-theme-accent/10"
                     >
                       <div className="flex items-center gap-2.5 text-xs font-bold text-white">
-                        <Icon className="size-4 text-[#ccff00]" />
+                        <Icon className="size-4 text-theme-accent" />
                         <span>{p.name}</span>
                       </div>
                       <ArrowRight className="size-3.5 text-white/40" />
@@ -135,7 +135,7 @@ export function CommandPalette({
                   className="flex w-full items-center justify-between rounded-xl p-3 text-left transition hover:bg-white/[0.05]"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="flex size-8 items-center justify-center rounded-lg bg-[#ccff00]/10 text-[#ccff00] text-xs font-bold overflow-hidden">
+                    <div className="flex size-8 items-center justify-center rounded-lg bg-theme-accent/10 text-theme-accent text-xs font-bold overflow-hidden">
                       {m.photoUrl ? (
                         <img src={m.photoUrl} alt={m.name} className="size-full object-cover" />
                       ) : (
@@ -150,7 +150,7 @@ export function CommandPalette({
                     </div>
                   </div>
                   <div className="text-right">
-                    <span className="text-xs font-extrabold text-[#ccff00]">{formatPKR(m.monthlyFee)}</span>
+                    <span className="text-xs font-extrabold text-theme-accent">{formatPKR(m.monthlyFee)}</span>
                     <p className="text-[10px] text-white/40">{m.status}</p>
                   </div>
                 </button>
@@ -168,7 +168,7 @@ export function CommandPalette({
         {/* Footer */}
         <div className="flex items-center justify-between border-t border-white/[0.08] bg-white/[0.02] px-4 py-2 text-[11px] text-white/40">
           <span>Press <kbd className="rounded bg-white/10 px-1.5 py-0.5 text-[10px] font-mono">Esc</kbd> to exit</span>
-          <span className="flex items-center gap-1 text-[#ccff00]"><Dumbbell className="size-3" /> Iron Forge</span>
+          <span className="flex items-center gap-1 text-theme-accent"><Dumbbell className="size-3" /> Iron Forge</span>
         </div>
       </div>
     </div>

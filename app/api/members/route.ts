@@ -27,7 +27,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: false, errors: validation.errors }, { status: 400 })
     }
 
-    const { name, phone, gender, plan, monthlyFee } = validation.data
+    const { name, phone, gender, plan, monthlyFee, photoUrl } = validation.data
 
     const initials = name
       .split(' ')
@@ -57,6 +57,7 @@ export async function POST(request: Request) {
       paymentDate: todayStr,
       status: 'Active',
       color: randomColor,
+      photoUrl,
     })
 
     return NextResponse.json({ success: true, data: newMember }, { status: 201 })

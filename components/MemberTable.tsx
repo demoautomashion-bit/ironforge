@@ -48,14 +48,14 @@ export function MemberTable({ members, onMarkPaid, onOpenActionSheet, onOpenDele
                 <td className="px-4 py-4">
                   <span className={`rounded-lg px-2.5 py-1 text-xs font-semibold ${
                     member.plan === 'Treadmill Pro'
-                      ? 'bg-[#ccff00]/10 text-[#ccff00] border border-[#ccff00]/20'
+                      ? 'bg-theme-accent/10 text-theme-accent border border-theme-accent/20'
                       : 'bg-white/[0.06] text-white/70'
                   }`}>
                     {member.plan}
                   </span>
                 </td>
                 <td className="px-4 py-4">
-                  <span className="font-extrabold text-[#ccff00]">{formatPKR(member.monthlyFee)}</span>
+                  <span className="font-extrabold text-theme-accent">{formatPKR(member.monthlyFee)}</span>
                 </td>
                 <td className="px-4 py-4 text-white/60 font-mono text-xs">
                   {member.phone ? member.phone : <span className="text-white/30 italic font-sans text-[11px]">N/A</span>}
@@ -73,7 +73,7 @@ export function MemberTable({ members, onMarkPaid, onOpenActionSheet, onOpenDele
                       className={`flex h-8 items-center gap-1.5 rounded-lg border px-3 text-xs font-bold transition-all duration-200 active:scale-95 ${
                         member.status === 'Active'
                           ? 'border-transparent text-white/30 cursor-default'
-                          : 'border-[#ccff00]/40 bg-[#ccff00]/10 text-[#ccff00] hover:bg-[#ccff00]/20'
+                          : 'border-theme-accent/40 bg-theme-accent/10 text-theme-accent hover:bg-theme-accent/20'
                       }`}
                     >
                       <Check className="size-3.5" />
@@ -124,7 +124,7 @@ export function MemberTable({ members, onMarkPaid, onOpenActionSheet, onOpenDele
 
 function StatusBadge({ status }: { status: string }) {
   const styles = {
-    Active: 'border-[#ccff00]/30 bg-[#ccff00]/10 text-[#ccff00]',
+    Active: 'border-theme-accent/30 bg-theme-accent/10 text-theme-accent',
     'Due Soon': 'border-amber-300/30 bg-amber-300/10 text-amber-300',
     Overdue: 'border-rose-400/30 bg-rose-400/10 text-rose-400',
   }

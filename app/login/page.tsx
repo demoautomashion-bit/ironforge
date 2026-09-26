@@ -1,8 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { Dumbbell, Lock, Mail, ArrowRight, Eye, EyeOff, ShieldCheck, Image as ImageIcon } from 'lucide-react'
+import { Lock, Mail, ArrowRight, Eye, EyeOff, ShieldCheck } from 'lucide-react'
+import { ThemeColor } from '@/lib/types'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -11,6 +12,22 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [themeColor, setThemeColor] = useState<ThemeColor>('lime')
+
+  useEffect(() => {
+    async function loadTheme() {
+      try {
+        const res = await fetch('/api/settings')
+        if (res.ok) {
+          const json = await res.json()
+          if (json.success && json.data?.themeColor) {
+            setThemeColor(json.data.themeColor)
+          }
+        }
+      } catch (e) {}
+    }
+    loadTheme()
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -27,7 +44,6 @@ export default function LoginPage() {
       const data = await res.json()
 
       if (res.ok && data.success) {
-        // Successful login, redirect to admin portal dashboard
         router.push('/')
         router.refresh()
       } else {
@@ -41,10 +57,10 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#090b0e] text-slate-100 flex flex-col justify-center items-center p-4 relative overflow-hidden font-sans">
+    <div data-theme={themeColor} className="min-h-screen bg-[#090b0e] text-slate-100 flex flex-col justify-center items-center p-4 relative overflow-hidden font-sans">
       {/* Dynamic Background Effects */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#ccff00]/10 rounded-full blur-[140px] pointer-events-none" />
-      <div className="absolute bottom-10 right-10 w-[300px] h-[300px] bg-[#00f2fe]/5 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-theme-accent/10 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute bottom-10 right-10 w-[300px] h-[300px] bg-theme-accent/5 rounded-full blur-[100px] pointer-events-none" />
       
       {/* Grid pattern overlay */}
       <div 
@@ -56,13 +72,11 @@ export default function LoginPage() {
         {/* Card Container */}
         <div className="bg-[#11151c]/80 backdrop-blur-xl border border-slate-800/80 rounded-2xl p-8 shadow-2xl shadow-black/80">
           
-          {/* ========================================================================= */}
-          {/* MOCKED LOGO SECTION (Replace the image or container once asset is ready)  */}
-          {/* ========================================================================= */}
+          {/* Logo Section */}
           <div className="flex flex-col items-center text-center mb-8">
             <div className="relative group cursor-pointer mb-4">
               {/* Logo Outer Glow Container */}
-              <div className="w-24 h-24 rounded-2xl border-2 border-[#ccff00]/60 bg-black flex items-center justify-center overflow-hidden transition-all duration-300 group-hover:border-[#ccff00] group-hover:scale-105 shadow-[0_0_30px_rgba(204,255,0,0.25)]">
+              <div className="w-24 h-24 rounded-2xl border-2 border-theme-accent/60 bg-black flex items-center justify-center overflow-hidden transition-all duration-300 group-hover:border-theme-accent group-hover:scale-105 shadow-[0_0_30px_rgba(var(--brand-accent-rgb),0.25)]">
                 <img src="/ironforge.jpeg" alt="Iron Forge Logo" className="w-full h-full object-cover" />
               </div>
             </div>
@@ -72,10 +86,9 @@ export default function LoginPage() {
               <span>IRON FORGE</span>
             </h1>
             <p className="text-xs text-slate-400 mt-1 uppercase tracking-widest font-semibold flex items-center gap-1">
-              <ShieldCheck className="size-3 text-[#ccff00]" /> Admin Portal Access Only
+              <ShieldCheck className="size-3 text-theme-accent" /> Admin Portal Access Only
             </p>
           </div>
-          {/* ========================================================================= */}
 
           {/* Error Alert Banner */}
           {error && (
@@ -101,7 +114,7 @@ export default function LoginPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="admin@ironforge.pk"
-                  className="w-full bg-[#18202c]/90 border border-slate-700/80 rounded-xl py-3 pl-10 pr-4 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-[#ccff00] focus:ring-1 focus:ring-[#ccff00] transition-colors"
+                  className="w-full bg-[#18202c]/90 border border-slate-700/80 rounded-xl py-3 pl-10 pr-4 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-theme-accent focus:ring-1 focus:ring-theme-accent transition-colors"
                 />
               </div>
             </div>
@@ -120,7 +133,7 @@ export default function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••••••"
-                  className="w-full bg-[#18202c]/90 border border-slate-700/80 rounded-xl py-3 pl-10 pr-11 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-[#ccff00] focus:ring-1 focus:ring-[#ccff00] transition-colors"
+                  className="w-full bg-[#18202c]/90 border border-slate-700/80 rounded-xl py-3 pl-10 pr-11 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-theme-accent focus:ring-1 focus:ring-theme-accent transition-colors"
                 />
                 <button
                   type="button"
@@ -136,7 +149,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full mt-2 bg-[#ccff00] hover:bg-[#b8e600] active:scale-[0.99] text-black font-bold py-3.5 px-4 rounded-xl transition-all shadow-lg shadow-[#ccff00]/20 flex items-center justify-center gap-2 text-sm disabled:opacity-50 cursor-pointer"
+              className="w-full mt-2 bg-theme-accent hover:bg-theme-accent-hover text-theme-btn font-bold py-3.5 px-4 rounded-xl transition-all shadow-lg shadow-[rgba(var(--brand-accent-rgb),0.2)] flex items-center justify-center gap-2 text-sm disabled:opacity-50 cursor-pointer active:scale-[0.99]"
             >
               {loading ? (
                 <div className="flex items-center gap-2">
