@@ -55,8 +55,20 @@ export function Header({
         <div className="mx-auto flex h-[70px] max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           {/* Logo & Gym Title */}
           <div className="flex items-center gap-3">
-            <div className="flex size-10 items-center justify-center rounded-xl border border-theme-accent/40 overflow-hidden bg-black shadow-[0_0_20px_rgba(var(--brand-accent-rgb),0.25)] transition hover:scale-105">
-              <img src="/ironforge.jpeg" alt="Iron Forge Logo" className="size-full object-cover" />
+            <div className="relative flex size-10 items-center justify-center rounded-xl border border-theme-accent/40 overflow-hidden bg-[#121614] shadow-[0_0_20px_rgba(var(--brand-accent-rgb),0.25)] transition hover:scale-105">
+              <img 
+                src="/ironforge.jpeg" 
+                alt="Iron Forge Logo" 
+                className="size-full object-cover"
+                onError={(e) => {
+                  e.currentTarget.style.display = 'none';
+                  const fallback = e.currentTarget.parentElement?.querySelector('.header-logo-fallback') as HTMLElement;
+                  if (fallback) fallback.style.display = 'flex';
+                }}
+              />
+              <div className="header-logo-fallback hidden size-full items-center justify-center bg-theme-accent/15 text-theme-accent">
+                <Dumbbell className="size-5" />
+              </div>
             </div>
             <div>
               <div className="flex items-center gap-2">

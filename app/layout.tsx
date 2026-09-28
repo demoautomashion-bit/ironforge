@@ -13,15 +13,19 @@ export const metadata: Metadata = {
     title: 'Iron Forge',
   },
   icons: {
-    icon: '/ironforge.jpeg',
-    shortcut: '/ironforge.jpeg',
-    apple: '/ironforge.jpeg',
+    icon: [
+      { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/ironforge.jpeg', type: 'image/jpeg' },
+    ],
+    shortcut: '/icon-192.png',
+    apple: [{ url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }],
   },
 }
 
 export const viewport: Viewport = {
   colorScheme: 'dark',
   themeColor: '#080a09',
+  viewportFit: 'cover',
 }
 
 export default function RootLayout({

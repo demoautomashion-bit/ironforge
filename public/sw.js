@@ -1,16 +1,19 @@
-// Service Worker for Iron District PWA
-const CACHE_NAME = 'iron-district-v1';
+// Service Worker for Iron Forge PWA
+const CACHE_NAME = 'iron-forge-v1';
 const ASSETS_TO_CACHE = [
   '/',
   '/icon-192.png',
   '/icon-512.png',
-  '/icon.svg'
+  '/apple-touch-icon.png',
+  '/ironforge.jpeg',
 ];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS_TO_CACHE);
+    caches.open(CACHE_NAME).then(async (cache) => {
+      await Promise.allSettled(
+        ASSETS_TO_CACHE.map((url) => cache.add(url).catch(() => {}))
+      );
     })
   );
   self.skipWaiting();
