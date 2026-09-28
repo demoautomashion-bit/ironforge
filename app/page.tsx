@@ -192,17 +192,17 @@ export default function Page() {
     const target = members.find((m) => m.id === id)
     try {
       const res = await fetch(`/api/members/${id}`, { method: 'DELETE' })
-      if (res.ok) {
-        fetchMembers()
+      const json = await res.json().catch(() => ({}))
+      if (res.ok && json.success !== false) {
+        await fetchMembers()
         showToast(`Removed ${target?.name || 'member'} from roster.`)
         return
       }
+      showToast(`Error: ${json.message || 'Failed to remove member from database.'}`)
     } catch (e) {
-      console.warn('Fallback local state member deletion')
+      console.error('Failed to soft delete member', e)
+      showToast('Network error: Could not remove member.')
     }
-
-    setMembers((prev) => prev.filter((m) => m.id !== id))
-    showToast(`Removed ${target?.name || 'member'} from roster.`)
   }
 
   if (isHydrating) {

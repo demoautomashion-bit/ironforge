@@ -5,6 +5,7 @@ export type ThemeColor = 'lime' | 'cyan' | 'orange' | 'violet'
 
 export interface Member {
   id: string
+  seqId?: string
   name: string
   initials: string
   phone?: string

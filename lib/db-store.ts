@@ -95,7 +95,8 @@ class NeonGymDatabase {
       const computedStatus = calculatePaymentStatus(m.paymentDate).status
       const seqId = idMap.get(m.id) || m.id
       return {
-        id: seqId,
+        id: m.id,
+        seqId,
         name: m.name,
         initials: m.initials,
         phone: m.phone || undefined,
@@ -158,7 +159,8 @@ class NeonGymDatabase {
     const seqId = String(activeCount).padStart(3, '0')
 
     return {
-      id: seqId,
+      id: created.id,
+      seqId,
       name: created.name,
       initials: created.initials,
       phone: created.phone || undefined,

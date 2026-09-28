@@ -66,7 +66,7 @@ export function AthleteProfileDrawer({
                   {status}
                 </span>
               </div>
-              <p className="text-xs text-white/50">{member.gender} Athlete • Member ID #{member.id}</p>
+              <p className="text-xs text-white/50">{member.gender} Athlete • Member ID #{member.seqId || member.id}</p>
             </div>
           </div>
           <button
