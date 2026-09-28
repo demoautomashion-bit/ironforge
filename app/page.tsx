@@ -226,10 +226,10 @@ export default function Page() {
   }
 
   return (
-    <main data-theme={themeColor} className="min-h-screen bg-[#080a09] text-white pb-20 md:pb-12 font-sans selection:bg-theme-accent selection:text-black animate-in fade-in duration-300">
+    <main data-theme={themeColor} className="min-h-screen bg-[#080a09] text-white pb-[calc(5rem+env(safe-area-inset-bottom,0px))] md:pb-12 font-sans selection:bg-theme-accent selection:text-black animate-in fade-in duration-300">
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed top-4 left-1/2 z-50 -translate-x-1/2 rounded-full border border-theme-accent/40 bg-[#0d120f] px-5 py-2.5 text-xs font-bold text-theme-accent shadow-[0_0_30px_rgba(var(--brand-accent-rgb),0.25)] animate-in slide-in-from-top duration-300">
+        <div className="fixed top-[calc(1rem+env(safe-area-inset-top,0px))] left-1/2 z-50 -translate-x-1/2 rounded-full border border-theme-accent/40 bg-[#0d120f] px-5 py-2.5 text-xs font-bold text-theme-accent shadow-[0_0_30px_rgba(var(--brand-accent-rgb),0.25)] animate-in slide-in-from-top duration-300">
           ✨ {toastMessage}
         </div>
       )}

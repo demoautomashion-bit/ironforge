@@ -51,7 +51,7 @@ export function Header({
 
   return (
     <>
-      <header className="sticky top-0 z-30 border-b border-white/[0.08] bg-[#080a09]/90 backdrop-blur-xl transition-all">
+      <header className="sticky top-0 z-30 border-b border-white/[0.08] bg-[#080a09]/95 backdrop-blur-xl transition-all pt-[env(safe-area-inset-top,0px)]">
         <div className="mx-auto flex h-[70px] max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           {/* Logo & Gym Title */}
           <div className="flex items-center gap-3">
@@ -204,7 +204,7 @@ export function Header({
       </header>
 
       {/* Mobile Fixed Bottom Navigation Bar for easy thumb access */}
-      <div className="fixed bottom-0 left-0 right-0 z-30 flex h-16 items-center justify-around border-t border-white/10 bg-[#080a09]/95 px-2 backdrop-blur-xl md:hidden">
+      <div className="fixed bottom-0 left-0 right-0 z-30 flex items-center justify-around border-t border-white/10 bg-[#080a09]/95 px-2 pb-[env(safe-area-inset-bottom,0px)] pt-2 h-[calc(4rem+env(safe-area-inset-bottom,0px))] backdrop-blur-xl md:hidden">
         {navItems.map((item) => {
           const Icon = item.icon
           const isActive = activeTab === item.id
