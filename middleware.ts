@@ -4,6 +4,9 @@ import type { NextRequest } from 'next/server'
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
+  // Check if request is for a static asset file
+  const isStaticAsset = /\.(?:svg|png|jpg|jpeg|gif|webp|ico|json|webmanifest)$/i.test(pathname)
+
   // Define public routes/assets that don't require auth
   const isPublicPath =
     pathname === '/login' ||
@@ -12,7 +15,8 @@ export function middleware(request: NextRequest) {
     pathname === '/favicon.ico' ||
     pathname === '/manifest.webmanifest' ||
     pathname === '/manifest.ts' ||
-    pathname === '/sw.js'
+    pathname === '/sw.js' ||
+    isStaticAsset
 
   const sessionCookie = request.cookies.get('iron_session')?.value
   const isAuthenticated = Boolean(
@@ -45,6 +49,6 @@ export const config = {
     /*
      * Match all paths except static assets
      */
-    '/((?!_next/static|_next/image|favicon.ico|sw.js).*)',
+    '/((?!_next/static|_next/image|favicon.ico|sw.js|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|json|webmanifest)$).*)',
   ],
 }
